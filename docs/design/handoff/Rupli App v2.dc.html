@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,300..800&display=swap">
+<style>
+:root{--bg:#FFF6E6;--card:#FFFFFF;--soft:#F6EBD5;--ink:#14211B;--mute:#5A675F;--line:#E8DBC1;--green:#0F5C3E;--on-green:#FFF6E6;--yellow:#FFC531;--chili:#E0401F;--chili-soft:#FFE2D9;--chili-ink:#992810;--mint:#D9F1E2;--mint-ink:#0F5C3E;--edge:#14211B;--num-stretch:112%}
+html[data-num=regular]{--num-stretch:100%}
+html[data-num=condensed]{--num-stretch:80%}
+html[data-theme=dark]{--bg:#0D1511;--card:#17221C;--soft:#1F2D26;--ink:#F4EDDF;--mute:#A4B0A8;--line:#2B3A31;--green:#17734E;--on-green:#F4EDDF;--chili:#FF6B4E;--chili-soft:#3B1E17;--chili-ink:#FFB5A4;--mint:#163A2A;--mint-ink:#8FE0B0;--edge:#000}
+body{margin:0;background:color-mix(in srgb,var(--ink) 10%,var(--bg));font-family:'Anek Latin',system-ui,sans-serif}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+[data-screen-label] *{flex-shrink:0}
+[data-screen-label] input{flex-shrink:1}
+input::placeholder{color:var(--mute)}
+a{color:var(--green)}
+a:hover{color:var(--chili)}
+.v2-sec{padding:48px 56px;color:var(--ink)}
+.v2-sh{display:flex;align-items:center;gap:12px;margin:0 0 24px;font:700 22px/1 'Anek Latin',system-ui}
+.v2-row{display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start}
+.v2-cap{display:flex;gap:8px;align-items:center;font:600 14px/1.3 'Anek Latin',system-ui;margin-bottom:12px}
+.v2-id{font:700 11px ui-monospace,Menlo,monospace;padding:4px 8px;border-radius:999px;background:var(--ink);color:var(--bg)}
+</style>
+</helmet>
+<section class="v2-sec" id="intro" style="display:flex;flex-wrap:wrap;gap:32px 56px;align-items:flex-end">
+<div style="flex:1 1 420px;max-width:560px">
+<div style="font-weight:800;font-stretch:125%;font-size:96px;letter-spacing:-0.04em;line-height:.85;color:var(--green)">rupli<span style="color:var(--yellow)">●</span></div>
+<p style="font-size:22px;line-height:1.3;font-weight:500;margin:18px 0 0;text-wrap:pretty">Version 2: cream, kirana green and turmeric yellow, set in Anek Latin. The first version stays in <a href="Rupli App.dc.html">Rupli App.dc.html</a>.</p>
+</div>
+<div style="flex:1 1 560px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;font-size:15px;line-height:1.45">
+<div style="background:var(--card);border-radius:20px;padding:18px"><div style="font-weight:700;color:var(--green);margin-bottom:4px">Palette</div>Green carries the brand and selection. Yellow is the one primary action. Chili red only appears for “you paid more”.</div>
+<div style="background:var(--card);border-radius:20px;padding:18px"><div style="font-weight:700;color:var(--green);margin-bottom:4px">Type</div>Anek Latin, by an Indian foundry, with a width axis. Prices sit wide and heavy with tabular figures.</div>
+<div style="background:var(--card);border-radius:20px;padding:18px"><div style="font-weight:700;color:var(--green);margin-bottom:4px">Touch</div>Pill chips, 48dp minimum, chunky yellow CTAs with an ink edge so they read in bright store light.</div>
+</div>
+</section>
+<section class="v2-sec" id="onboarding">
+<div class="v2-sh"><span class="v2-id">A</span>Onboarding &amp; security</div>
+<div class="v2-row">
+<div id="s01"><div class="v2-cap"><span class="v2-id">01</span>Sign in</div>
+<div data-screen-label="01 Sign in" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="flex:none;background:var(--green);color:var(--on-green);border-radius:0 0 32px 32px;padding-bottom:28px;position:relative;overflow:hidden">
+<div style="height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="position:relative;height:220px">
+<span style="position:absolute;left:28px;top:26px;width:64px;height:64px;border-radius:20px;background:var(--yellow);display:grid;place-items:center;font-size:34px;transform:rotate(-8deg)">🥛</span>
+<span style="position:absolute;left:118px;top:70px;width:56px;height:56px;border-radius:18px;background:#FFF6E6;display:grid;place-items:center;font-size:30px;transform:rotate(6deg)">🧅</span>
+<span style="position:absolute;left:200px;top:18px;width:68px;height:68px;border-radius:22px;background:#FFF6E6;display:grid;place-items:center;font-size:36px;transform:rotate(-4deg)">🍚</span>
+<span style="position:absolute;left:292px;top:84px;width:60px;height:60px;border-radius:20px;background:var(--yellow);display:grid;place-items:center;font-size:32px;transform:rotate(10deg)">🫘</span>
+<span style="position:absolute;left:46px;top:132px;width:52px;height:52px;border-radius:16px;background:#FFF6E6;display:grid;place-items:center;font-size:28px;transform:rotate(12deg)">🧴</span>
+<span style="position:absolute;left:186px;top:146px;width:58px;height:58px;border-radius:18px;background:var(--chili);color:#fff;display:grid;place-items:center;font-size:30px;font-weight:800;transform:rotate(-10deg)">₹</span>
+</div>
+<div style="padding:0 24px">
+<div style="font-weight:800;font-stretch:125%;font-size:68px;letter-spacing:-0.04em;line-height:.85">rupli<span style="color:var(--yellow)">●</span></div>
+<p style="font-size:20px;line-height:1.3;margin:12px 0 0;max-width:300px;opacity:.92">The monthly kirana, listed, shopped and tracked with one hand.</p>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="padding:0 24px 18px;display:flex;flex-direction:column;gap:12px">
+<button style="height:56px;border-radius:18px;background:var(--card);border:1.5px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 18px;font-size:17px;font-weight:600"><span style="width:26px;height:26px;border-radius:50%;background:conic-gradient(#EA4335 0 25%,#FBBC05 0 50%,#34A853 0 75%,#4285F4 0);display:grid;place-items:center"><span style="width:14px;height:14px;border-radius:50%;background:var(--card)"></span></span>Continue with Google</button>
+<div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--mute)"><span style="flex:1;height:1.5px;background:var(--line)"></span>or<span style="flex:1;height:1.5px;background:var(--line)"></span></div>
+<input placeholder="Email address" style="height:56px;border-radius:18px;border:1.5px solid var(--line);background:var(--card);padding:0 18px;font-size:17px;outline:none">
+<button style="height:60px;border-radius:18px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:18px;font-weight:700">Send OTP<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></button>
+<p style="margin:2px 0 0;font-size:13px;color:var(--mute);text-align:center">By continuing you agree to the Terms and Privacy Policy</p>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s02"><div class="v2-cap"><span class="v2-id">02</span>Email OTP</div>
+<div data-screen-label="02 Email OTP" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="height:56px;flex:none;display:flex;align-items:center;padding:0 12px"><button style="width:48px;height:48px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button></div>
+<div style="padding:20px 24px 0">
+<span style="display:inline-grid;place-items:center;width:64px;height:64px;border-radius:20px;background:var(--mint);font-size:32px">📬</span>
+<h1 style="font-size:34px;font-weight:800;line-height:1.05;margin:18px 0 8px">Check your email</h1>
+<p style="font-size:17px;margin:0;color:var(--mute)">Code sent to <strong style="color:var(--ink)">aarti.kulkarni@gmail.com</strong></p>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:32px">
+<div style="height:64px;border-radius:16px;background:var(--card);border:2px solid var(--green);display:grid;place-items:center;font-weight:800;font-size:30px">4</div>
+<div style="height:64px;border-radius:16px;background:var(--card);border:2px solid var(--green);display:grid;place-items:center;font-weight:800;font-size:30px">8</div>
+<div style="height:64px;border-radius:16px;background:var(--card);border:2px solid var(--green);display:grid;place-items:center;font-weight:800;font-size:30px">2</div>
+<div style="height:64px;border-radius:16px;background:var(--card);border:2px solid var(--green);display:grid;place-items:center;font-weight:800;font-size:30px">9</div>
+<div style="height:64px;border-radius:16px;background:var(--card);border:2.5px solid var(--ink);box-shadow:0 0 0 4px var(--yellow);display:grid;place-items:center"><span style="width:2px;height:28px;background:var(--ink)"></span></div>
+<div style="height:64px;border-radius:16px;background:var(--card);border:1.5px solid var(--line)"></div>
+</div>
+<p style="font-size:15px;margin:18px 0 0;color:var(--mute)">Resend code in <strong style="color:var(--ink)">0:24</strong></p>
+</div>
+<div style="flex:1"></div>
+<div style="padding:0 24px 18px;display:flex;flex-direction:column;gap:8px">
+<button style="height:60px;border-radius:18px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:18px;font-weight:700;opacity:.5">Verify<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></button>
+<button style="height:48px;border:0;background:none;font-size:16px;font-weight:600;color:var(--green)">Use a different email</button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s03"><div class="v2-cap"><span class="v2-id">03</span>App lock</div>
+<div data-screen-label="03 App lock" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="position:absolute;inset:0;filter:blur(10px);padding:56px 20px 0;display:flex;flex-direction:column;gap:16px">
+<div style="height:200px;border-radius:28px;background:var(--green);padding:24px;color:var(--on-green);font-weight:800;font-size:72px">₹8,420</div>
+<div style="height:130px;border-radius:24px;background:var(--card)"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div style="height:96px;border-radius:22px;background:var(--mint)"></div><div style="height:96px;border-radius:22px;background:var(--soft)"></div></div>
+<div style="height:60px;border-radius:18px;background:var(--yellow)"></div>
+</div>
+<div style="position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 30%,transparent)"></div>
+<div style="position:relative;height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="flex:1"></div>
+<div style="position:relative;background:var(--card);border-radius:32px 32px 0 0;box-shadow:0 -10px 40px rgba(20,33,27,.18);padding:14px 24px 8px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center">
+<span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span>
+<span style="width:104px;height:104px;border-radius:50%;background:var(--yellow);color:#14211B;display:grid;place-items:center;margin-top:12px;box-shadow:0 0 0 10px color-mix(in srgb,var(--yellow) 30%,transparent)"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4M14 13.12c0 2.38 0 6.38-1 8.88M17.29 21.02c.12-.6.43-2.3.5-3.02M2 12a10 10 0 0 1 18-6M2 16h.01M21.8 16c.2-2 .131-5.354 0-6M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2M8.65 22c.21-.66.45-1.32.57-2M9 6.8a6 6 0 0 1 9 5.2v2"></path></svg></span>
+<div><h2 style="font-size:28px;font-weight:800;margin:10px 0 4px">Unlock Rupli</h2><p style="margin:0;font-size:16px;color:var(--mute)">Touch the fingerprint sensor</p></div>
+<button style="height:56px;width:100%;border-radius:18px;background:var(--card);border:1.5px solid var(--line);font-size:17px;font-weight:600;margin-top:8px">Use PIN instead</button>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div>
+</div></div>
+<div id="s04"><div class="v2-cap"><span class="v2-id">04</span>SMS import · explain</div>
+<div data-screen-label="04 SMS explain" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 24px"><span style="display:flex;gap:6px"><span style="width:24px;height:6px;border-radius:3px;background:var(--green)"></span><span style="width:12px;height:6px;border-radius:3px;background:var(--line)"></span></span><button style="height:48px;padding:0 14px;border:0;background:none;font-size:16px;font-weight:600;color:var(--green)">Skip</button></div>
+<div style="padding:4px 24px 0;display:flex;flex-direction:column;gap:18px">
+<h1 style="font-size:34px;font-weight:800;line-height:1.02;margin:0;text-wrap:pretty">Track spends from your bank SMS</h1>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="align-self:flex-start;max-width:290px;background:var(--soft);border-radius:18px 18px 18px 4px;padding:12px 14px;font-size:14px;line-height:1.4;color:var(--mute)">Rs.486.00 debited from A/c XX1234 on 01-10-26 to ZEPTO. UPI Ref 427519830042</div>
+<div style="align-self:center;color:var(--green)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"></path></svg></div>
+<div style="background:var(--card);border-radius:20px;padding:14px;display:flex;align-items:center;gap:12px;border:1.5px solid var(--line)"><span style="width:44px;height:44px;border-radius:14px;background:var(--mint);display:grid;place-items:center;font-size:22px">🛵</span><span style="flex:1"><strong style="display:block;font-size:16px">Zepto</strong><span style="font-size:13px;color:var(--mute)">HDFC ••1234 · 1 Oct · Groceries</span></span><span style="font-weight:800;font-stretch:var(--num-stretch);font-size:24px">₹486</span></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;margin-top:4px">
+<div style="display:flex;gap:12px"><span style="width:36px;height:36px;flex:none;border-radius:50%;background:var(--mint);color:var(--mint-ink);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span><div><strong style="display:block;font-size:16px">Reads bank and UPI debit alerts</strong><span style="font-size:14px;color:var(--mute)">Amount, merchant, date, last 4 digits</span></div></div>
+<div style="display:flex;gap:12px"><span style="width:36px;height:36px;flex:none;border-radius:50%;background:var(--mint);color:var(--mint-ink);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h12v10H6zM8.5 11V7.5a3.5 3.5 0 0 1 7 0V11"></path></svg></span><div><strong style="display:block;font-size:16px">Raw SMS never leave your phone</strong><span style="font-size:14px;color:var(--mute)">Read on this device. Only the result is saved.</span></div></div>
+<div style="display:flex;gap:12px"><span style="width:36px;height:36px;flex:none;border-radius:50%;background:var(--soft);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></span><div><strong style="display:block;font-size:16px">Skips OTPs and personal chats</strong><span style="font-size:14px;color:var(--mute)">Promotions are ignored too</span></div></div>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="padding:0 24px 18px;display:flex;flex-direction:column;gap:6px">
+<button style="height:60px;border-radius:18px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:18px;font-weight:700">Allow SMS access<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></button>
+<button style="height:48px;border:0;background:none;font-size:16px;font-weight:600;color:var(--mute)">Not now</button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s05"><div class="v2-cap"><span class="v2-id">05</span>SMS import · permission</div>
+<div data-screen-label="05 SMS permission" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:72px 24px 0"><h1 style="font-size:34px;font-weight:800;line-height:1.02;margin:0">Track spends from your bank SMS</h1></div>
+<div style="position:absolute;inset:0;background:rgba(10,18,14,.55)"></div>
+<div style="position:absolute;left:28px;right:28px;top:240px;background:var(--card);border-radius:28px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center">
+<span style="color:var(--green)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>
+<div style="font-size:21px;line-height:1.3">Allow <strong>Rupli</strong> to send and view SMS messages?</div>
+<div style="display:flex;flex-direction:column;gap:8px;width:100%">
+<button style="height:52px;border-radius:26px;border:0;background:var(--green);color:var(--on-green);font-weight:700;font-size:16px">Allow</button>
+<button style="height:52px;border-radius:26px;border:0;background:var(--soft);font-weight:600;font-size:16px">Don’t allow</button>
+</div>
+</div>
+<div style="position:absolute;left:28px;right:28px;bottom:48px;display:flex;gap:10px;color:#F4EDDF;font-size:15px;line-height:1.45"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" style="flex:none;margin-top:1px"><path d="M6 11h12v10H6zM8.5 11V7.5a3.5 3.5 0 0 1 7 0V11"></path></svg>Rupli only reads bank and UPI debit alerts. It never sends SMS.</div>
+</div></div>
+<div id="s06"><div class="v2-cap"><span class="v2-id">06</span>SMS import · progress (live)</div>
+<div data-screen-label="06 SMS progress" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="flex:none;background:var(--green);color:var(--on-green);border-radius:0 0 32px 32px;padding-bottom:24px">
+<div style="height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:28px 24px 0">
+<div style="font-size:18px;font-weight:600;opacity:.9">Reading last 6 months…</div>
+<div style="font-weight:800;font-stretch:var(--num-stretch);font-size:124px;letter-spacing:-0.03em;line-height:.85;margin-top:12px;color:var(--yellow)">{{ smsCount }}</div>
+<div style="font-size:20px;font-weight:600">transactions found</div>
+<div style="height:14px;border-radius:7px;background:rgba(255,246,230,.2);margin-top:22px;overflow:hidden"><div style="height:100%;width:{{ smsW }};border-radius:7px;background:var(--yellow)"></div></div>
+<div style="font-size:15px;margin-top:8px;opacity:.85">{{ smsMonth }}</div>
+</div>
+</div>
+<div style="margin:20px 20px 0;background:var(--card);border-radius:24px;padding:6px 16px">
+<sc-for list="{{ smsCats }}" as="c" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;gap:12px;height:52px;border-bottom:1px solid var(--line);font-size:16px"><span style="font-size:22px">{{ c.e }}</span><span style="flex:1">{{ c.n }}</span><span style="font-weight:800;font-size:18px">{{ c.v }}</span></div>
+</sc-for>
+</div>
+<div style="flex:1"></div>
+<div style="padding:0 24px 18px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:10px;justify-content:center;font-size:14px;color:var(--mute)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M6 11h12v10H6zM8.5 11V7.5a3.5 3.5 0 0 1 7 0V11"></path></svg>Running on this phone. Raw SMS stay here.</div>
+<button style="height:56px;border-radius:18px;background:var(--card);border:1.5px solid var(--line);font-size:17px;font-weight:600">Continue in background</button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+</div>
+</section>
+
+<section class="v2-sec" id="home">
+<div class="v2-sh"><span class="v2-id">B</span>Home &amp; lists</div>
+<div class="v2-row">
+<div id="s07"><div class="v2-cap"><span class="v2-id">07</span>Home</div>
+<div data-screen-label="07 Home" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px">
+<div><div style="font-size:14px;color:var(--mute)">Namaste,</div><div style="font-size:20px;font-weight:700;line-height:1">Aarti</div></div>
+<div style="width:44px;height:44px;border-radius:50%;background:var(--yellow);color:#14211B;display:grid;place-items:center;font-weight:800;font-size:16px">AK</div>
+</div>
+<div style="flex:1;min-height:0;overflow:hidden;padding:8px 16px 0;display:flex;flex-direction:column;gap:12px">
+<div style="background:var(--green);color:var(--on-green);border-radius:28px;padding:20px 20px 18px;position:relative;overflow:hidden">
+<span style="position:absolute;right:-18px;top:-18px;width:120px;height:120px;border-radius:50%;background:color-mix(in srgb,var(--yellow) 22%,transparent)"></span>
+<div style="position:relative;font-size:15px;font-weight:500;opacity:.9">October grocery spend</div>
+<div style="position:relative;font-weight:800;font-stretch:var(--num-stretch);font-size:78px;letter-spacing:-0.03em;line-height:.9;margin-top:8px">₹8,420</div>
+<div style="position:relative;display:flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:wrap"><span style="background:var(--yellow);color:#14211B;font-size:14px;font-weight:700;padding:5px 12px;border-radius:999px">▼ ₹685 less</span><span style="font-size:14px;opacity:.85">than Sep · ₹9,105</span></div>
+</div>
+<div style="background:var(--card);border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:12px;border:1.5px solid var(--line)">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="background:var(--soft);font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px">Oct 2026 · Monthly Kirana</span><span style="font-size:14px;color:var(--mute)">Est. <strong style="color:var(--ink)">₹6,850</strong></span></div>
+<div style="display:flex;align-items:flex-end;justify-content:space-between"><div style="display:flex;align-items:baseline;gap:4px"><span style="font-weight:800;font-stretch:var(--num-stretch);font-size:40px;line-height:.9">12</span><span style="font-size:17px;color:var(--mute);font-weight:600">/40 items</span></div><span style="font-size:15px;font-weight:700;color:var(--green)">Open list →</span></div>
+<div style="height:12px;border-radius:6px;background:var(--soft);overflow:hidden"><div style="height:100%;width:30%;border-radius:6px;background:var(--green)"></div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div style="background:var(--mint);border-radius:22px;padding:14px;height:96px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer"><span style="font-size:26px">⚖️</span><div><div style="font-weight:700;font-size:17px">Compare</div><div style="font-size:13px;color:var(--mute)">Price per kg or L</div></div></div>
+<div style="background:var(--soft);border-radius:22px;padding:14px;height:96px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer"><span style="font-size:26px">📊</span><div><div style="font-weight:700;font-size:17px">Spend</div><div style="font-size:13px;color:var(--mute)">6-month trend</div></div></div>
+</div>
+<div style="background:var(--card);border-radius:24px;padding:6px 16px;border:1.5px solid var(--line)">
+<div style="font-size:15px;font-weight:700;padding:10px 0 4px">Recent trips</div>
+<sc-for list="{{ trips }}" as="t" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:1px solid var(--line)"><span style="width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:20px">{{ t.e }}</span><span style="flex:1;min-width:0"><span style="display:block;font-weight:600;font-size:15px">{{ t.n }}</span><span style="font-size:13px;color:var(--mute)">{{ t.m }}</span></span><span style="font-weight:800;font-size:17px">{{ t.p }}</span></div>
+</sc-for>
+</div>
+</div>
+<div style="flex:none;padding:12px 16px 14px;background:linear-gradient(transparent,var(--bg) 30%)">
+<button style="height:62px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:19px;font-weight:700"><span style="display:flex;align-items:center;gap:12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.5L22 8H6M9 21h.01M18 21h.01"></path></svg>Start shopping</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></button>
+</div>
+<dc-import name="RupliNav2" active="home" hint-size="100%,76px"></dc-import>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--card)"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s08"><div class="v2-cap"><span class="v2-id">08</span>Lists</div>
+<div data-screen-label="08 Lists" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:12px 20px 12px"><h1 style="font-size:38px;font-weight:800;margin:0;line-height:1">Lists</h1></div>
+<div style="flex:1;min-height:0;overflow:hidden;padding:4px 16px;display:flex;flex-direction:column;gap:12px">
+<div style="background:var(--green);color:var(--on-green);border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="background:rgba(255,246,230,.16);font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px">Oct 2026 · Monthly Kirana</span><span style="background:var(--yellow);color:#14211B;font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px">Shopping</span></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end"><div><div style="font-size:14px;opacity:.85">40 items · 12 picked</div><div style="font-weight:800;font-stretch:var(--num-stretch);font-size:36px;line-height:1">₹6,850 <span style="font-size:15px;font-weight:500;font-stretch:100%;opacity:.8">est.</span></div></div><span style="font-size:24px">🛒</span></div>
+<div style="height:10px;border-radius:5px;background:rgba(255,246,230,.2);overflow:hidden"><div style="height:100%;width:30%;border-radius:5px;background:var(--yellow)"></div></div>
+</div>
+<div style="background:var(--card);border-radius:24px;padding:16px;display:flex;align-items:center;gap:14px;border:1.5px solid var(--line)"><span style="width:52px;height:52px;border-radius:16px;background:var(--chili-soft);display:grid;place-items:center;font-size:26px">🪔</span><div style="flex:1"><div style="font-size:13px;color:var(--mute)">Nov 2026 · Diwali &amp; Pooja</div><div style="font-weight:700;font-size:17px">16 items · est. ₹2,340</div></div><span style="background:var(--soft);font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px">Draft</span></div>
+<div style="background:var(--card);border-radius:24px;padding:16px;display:flex;align-items:center;gap:14px;border:1.5px solid var(--line)"><span style="width:52px;height:52px;border-radius:16px;background:var(--mint);display:grid;place-items:center;font-size:26px">🧺</span><div style="flex:1"><div style="font-size:13px;color:var(--mute)">Sep 2026 · Monthly Kirana</div><div style="font-weight:700;font-size:17px">38 items · paid ₹9,105</div></div><span style="background:var(--mint);color:var(--mint-ink);font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px">Done ✓</span></div>
+<div style="background:var(--card);border-radius:24px;padding:16px;display:flex;align-items:center;gap:14px;border:1.5px solid var(--line)"><span style="width:52px;height:52px;border-radius:16px;background:var(--mint);display:grid;place-items:center;font-size:26px">🧺</span><div style="flex:1"><div style="font-size:13px;color:var(--mute)">Aug 2026 · Monthly Kirana</div><div style="font-weight:700;font-size:17px">41 items · paid ₹8,210</div></div><span style="background:var(--mint);color:var(--mint-ink);font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px">Done ✓</span></div>
+</div>
+<div style="flex:none;padding:12px 16px 14px;display:flex;gap:10px">
+<button style="height:58px;flex:1;border-radius:18px;background:var(--card);border:1.5px solid var(--line);font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>New list</button>
+<button style="height:58px;flex:2;border-radius:18px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M4 16V6a2 2 0 0 1 2-2h10"></path></svg>Copy last month’s list</button>
+</div>
+<dc-import name="RupliNav2" active="lists" hint-size="100%,76px"></dc-import>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--card)"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s09"><div class="v2-cap"><span class="v2-id">09</span>List detail (live)</div>
+<div data-screen-label="09 List detail" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="flex:none;padding:0 16px 12px">
+<div style="height:52px;display:flex;align-items:center;justify-content:space-between"><button style="width:48px;height:48px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button><span style="font-size:16px;font-weight:600">Oct 2026 · Monthly Kirana</span><button style="width:48px;height:48px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5h.01M12 12h.01M12 19h.01"></path></svg></button></div>
+<div style="background:var(--green);color:var(--on-green);border-radius:24px;padding:16px 18px;margin-top:8px">
+<div style="display:flex;justify-content:space-between;align-items:flex-end"><div><div style="font-size:14px;opacity:.85">Estimated total</div><div style="font-weight:800;font-stretch:var(--num-stretch);font-size:46px;letter-spacing:-0.02em;line-height:.95">{{ estTotal }}</div></div><div style="text-align:right"><div style="font-weight:800;font-size:22px;color:var(--yellow)">{{ picked }}</div><div style="font-size:13px;opacity:.85">picked</div></div></div>
+<div style="height:8px;border-radius:4px;background:rgba(255,246,230,.2);overflow:hidden;margin-top:12px"><div style="height:100%;width:{{ pickedW }};border-radius:4px;background:var(--yellow)"></div></div>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 16px 16px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+<div style="background:var(--card);border-radius:22px;padding:4px 14px;border:1.5px solid var(--line)">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 4px"><span style="font-size:14px;font-weight:700">{{ g.name }}</span><span style="font-size:13px;color:var(--mute)">{{ g.count }}</span></div>
+<sc-for list="{{ g.items }}" as="it" hint-placeholder-count="1">
+<div style="display:grid;grid-template-columns:32px 44px minmax(0,1fr) auto;align-items:center;column-gap:10px;min-height:72px;padding:6px 0">
+<button onClick="{{ it.toggle }}" style="width:32px;height:48px;border:0;background:none;padding:0;display:flex;align-items:center">
+<sc-if value="{{ it.checked }}"><span style="width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--on-green);display:grid;place-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span></sc-if>
+<sc-if value="{{ it.unchecked }}"><span style="width:26px;height:26px;border-radius:50%;border:2px solid var(--mute)"></span></sc-if>
+</button>
+<span style="width:44px;height:44px;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-size:24px">{{ it.e }}</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+<div style="font-size:16px;font-weight:700;line-height:1.15;text-wrap:pretty">{{ it.n }} <span style="font-weight:400;color:var(--mute)">· {{ it.a }}</span></div>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:13px"><span style="font-weight:600">{{ it.p }}</span><span style="background:var(--mint);color:var(--mint-ink);font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px">{{ it.b }}</span><span style="color:var(--mute)">{{ it.last }}</span></div>
+</div>
+<div style="display:flex;align-items:center;height:44px;border-radius:22px;background:var(--soft);padding:0 2px">
+<button onClick="{{ it.dec }}" style="width:40px;height:40px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>
+<span style="min-width:28px;text-align:center;font-weight:800;font-size:16px">{{ it.qty }}</span>
+<button onClick="{{ it.inc }}" style="width:40px;height:40px;border-radius:50%;border:0;background:var(--green);color:var(--on-green);display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div style="flex:none;padding:12px 16px 14px;display:flex;gap:10px;background:var(--bg);box-shadow:0 -8px 24px rgba(20,33,27,.08)">
+<button style="height:58px;flex:1;border-radius:18px;background:var(--card);border:1.5px solid var(--line);font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Add items</button>
+<button style="height:58px;flex:1.5;border-radius:18px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px">Start shopping<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+</div>
+</section>
+<section class="v2-sec" id="shopping">
+<div class="v2-sh"><span class="v2-id">C</span>Shopping</div>
+<div class="v2-row">
+<div id="s10"><div class="v2-cap"><span class="v2-id">10</span>Product picker</div>
+<div data-screen-label="10 Product picker" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="height:52px;flex:none;display:flex;align-items:center;gap:8px;padding:0 12px"><button style="width:48px;height:48px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button><span style="font-weight:700;font-size:19px">Add to Oct list</span></div>
+<div style="flex:none;margin:6px 16px 0;height:54px;border-radius:27px;background:var(--card);border:2px solid var(--green);display:flex;align-items:center;gap:10px;padding:0 18px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="Search milk, doodh, dahi…" style="flex:1;border:0;background:none;outline:none;font-size:17px;min-width:0"></div>
+<div style="flex:none;padding:16px 0 0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 20px 8px"><span style="font-size:16px;font-weight:700">Your usual</span><span style="font-size:14px;font-weight:600;color:var(--green)">See all</span></div>
+<div style="display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 16px 4px">
+<sc-for list="{{ usual }}" as="u" hint-placeholder-count="5">
+<sc-if value="{{ u.sel }}"><div style="flex:none;width:76px;height:88px;border-radius:20px;background:var(--green);color:var(--on-green);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><span style="font-size:30px;line-height:1">{{ u.e }}</span><span style="font-size:13px;font-weight:600">{{ u.n }}</span><span style="position:absolute;top:-4px;right:-4px;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--yellow);color:#14211B;font-size:12px;font-weight:800;display:grid;place-items:center;border:2px solid var(--bg)">{{ u.b }}</span></div></sc-if>
+<sc-if value="{{ u.off }}"><div style="flex:none;width:76px;height:88px;border-radius:20px;background:var(--card);border:1.5px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer"><span style="font-size:30px;line-height:1">{{ u.e }}</span><span style="font-size:13px;font-weight:600">{{ u.n }}</span></div></sc-if>
+</sc-for>
+</div>
+</div>
+<div style="flex:none;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:14px 16px 10px">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<sc-if value="{{ t.on }}"><span style="flex:none;height:44px;display:flex;align-items:center;padding:0 18px;border-radius:22px;background:var(--ink);color:var(--bg);font-size:15px;font-weight:700">{{ t.t }}</span></sc-if>
+<sc-if value="{{ t.off }}"><span style="flex:none;height:44px;display:flex;align-items:center;padding:0 18px;border-radius:22px;background:var(--card);border:1.5px solid var(--line);font-size:15px;font-weight:500;cursor:pointer">{{ t.t }}</span></sc-if>
+</sc-for>
+</div>
+<div style="flex:1;min-height:0;overflow:hidden;padding:0 16px">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<sc-for list="{{ tiles }}" as="t" hint-placeholder-count="9">
+<sc-if value="{{ t.sel }}"><div style="height:112px;border-radius:20px;background:var(--card);border:2.5px solid var(--green);position:relative;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center"><span style="font-size:34px;line-height:1;margin-bottom:6px">{{ t.e }}</span><span style="font-size:15px;font-weight:700">{{ t.n }}</span><span style="font-size:12px;color:var(--mute)">{{ t.a }}</span><span style="position:absolute;top:6px;right:6px;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--green);color:var(--on-green);font-size:12px;font-weight:800;display:grid;place-items:center">{{ t.b }}</span></div></sc-if>
+<sc-if value="{{ t.off }}"><div style="height:112px;border-radius:20px;background:var(--card);border:1.5px solid var(--line);padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer"><span style="font-size:34px;line-height:1;margin-bottom:6px">{{ t.e }}</span><span style="font-size:15px;font-weight:700">{{ t.n }}</span><span style="font-size:12px;color:var(--mute)">{{ t.a }}</span></div></sc-if>
+</sc-for>
+</div>
+</div>
+<div style="flex:none;margin:10px 16px 12px;border-radius:22px;background:var(--ink);color:var(--bg);padding:8px 8px 8px 18px;display:flex;align-items:center;gap:12px">
+<span style="font-weight:800;font-stretch:var(--num-stretch);font-size:34px;line-height:1;color:var(--yellow)">6</span>
+<span style="flex:1;font-size:14px;line-height:1.25"><strong style="display:block;font-size:16px">items selected</strong><span style="opacity:.75">est. ₹3,198</span></span>
+<button style="height:52px;padding:0 22px;border-radius:16px;border:0;background:var(--yellow);color:#14211B;font-size:17px;font-weight:700">Done</button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s11"><div class="v2-cap"><span class="v2-id">11</span>Pack sheet (live)</div>
+<div data-screen-label="11 Pack sheet" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="padding:100px 16px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<sc-for list="{{ tiles }}" as="t" hint-placeholder-count="9"><div style="height:112px;border-radius:20px;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-size:34px">{{ t.e }}</span><span style="font-weight:700">{{ t.n }}</span></div></sc-for>
+</div>
+<div style="position:absolute;inset:0;background:rgba(10,18,14,.5)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:32px 32px 0 0;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:center;padding:12px 0 4px"><span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span></div>
+<div style="padding:8px 20px 0;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;gap:14px;align-items:center">
+<span style="width:68px;height:68px;flex:none;border-radius:22px;background:var(--soft);display:grid;place-items:center;font-size:40px">🥛</span>
+<div style="flex:1;min-width:0"><div style="font-size:28px;font-weight:800;line-height:1.05">Milk <span style="font-weight:400;color:var(--mute)">· doodh</span></div><div style="font-size:14px;margin-top:4px;color:var(--mute)">Last paid ₹68 · Amul 1 L · 28 Sep</div></div>
+<button style="width:48px;height:48px;border-radius:50%;border:0;background:var(--soft);display:grid;place-items:center;align-self:flex-start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+</div>
+<div><div style="font-size:15px;font-weight:700;margin-bottom:8px">Pack size</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+<sc-for list="{{ packs }}" as="p" hint-placeholder-count="3">
+<sc-if value="{{ p.sel }}"><button onClick="{{ p.pick }}" style="height:64px;border-radius:18px;border:2px solid var(--green);background:var(--green);color:var(--on-green);display:flex;flex-direction:column;align-items:center;justify-content:center"><strong style="font-size:18px">{{ p.l }}</strong><span style="font-size:13px;opacity:.85">{{ p.price }}</span></button></sc-if>
+<sc-if value="{{ p.off }}"><button onClick="{{ p.pick }}" style="height:64px;border-radius:18px;border:1.5px solid var(--line);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center"><strong style="font-size:18px">{{ p.l }}</strong><span style="font-size:13px;color:var(--mute)">{{ p.price }}</span></button></sc-if>
+</sc-for>
+</div></div>
+<div><div style="font-size:15px;font-weight:700;margin-bottom:8px">Brand <span style="font-weight:400;color:var(--mute)">· optional</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ brands }}" as="b" hint-placeholder-count="4">
+<sc-if value="{{ b.sel }}"><button onClick="{{ b.pick }}" style="height:48px;border-radius:24px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);padding:0 18px;font-weight:700;font-size:15px">{{ b.l }}</button></sc-if>
+<sc-if value="{{ b.off }}"><button onClick="{{ b.pick }}" style="height:48px;border-radius:24px;border:1.5px solid var(--line);background:var(--card);padding:0 18px;font-weight:500;font-size:15px">{{ b.l }}</button></sc-if>
+</sc-for>
+</div></div>
+<div style="display:flex;align-items:center;justify-content:space-between;background:var(--soft);border-radius:22px;padding:10px 10px 10px 18px">
+<div><div style="font-size:15px;font-weight:700">Quantity</div><div style="font-size:13px;color:var(--mute)">{{ sheetEach }}</div></div>
+<div style="display:flex;align-items:center;gap:6px">
+<button onClick="{{ decQty }}" style="width:48px;height:48px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>
+<span style="min-width:48px;text-align:center;font-weight:800;font-stretch:var(--num-stretch);font-size:28px">{{ qty }}</span>
+<button onClick="{{ incQty }}" style="width:48px;height:48px;border-radius:50%;border:0;background:var(--green);color:var(--on-green);display:grid;place-items:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</div>
+<button style="height:62px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:19px;font-weight:700">Add to list<span style="font-weight:800;font-stretch:var(--num-stretch);font-size:21px">{{ sheetTotal }}</span></button>
+</div>
+<div style="height:30px;flex:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div>
+</div></div>
+<div id="s12"><div class="v2-cap"><span class="v2-id">12</span>Cart mode · in store</div>
+<div data-screen-label="12 Cart mode" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="flex:none;background:var(--green);color:var(--on-green);border-radius:0 0 28px 28px">
+<div style="height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:2px 20px 18px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:var(--yellow)"></span>In store · DMart, Kothrud</span><button style="width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,246,230,.14);color:inherit;display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M9 5v14M15 5v14"></path></svg></button></div>
+<div style="font-weight:800;font-stretch:var(--num-stretch);font-size:86px;letter-spacing:-0.03em;line-height:.9;margin-top:6px">₹2,348</div>
+<div style="display:flex;gap:8px;margin-top:12px"><span style="background:var(--yellow);color:#14211B;font-size:14px;font-weight:700;padding:5px 12px;border-radius:999px">18 in cart</span><span style="background:rgba(255,246,230,.16);font-size:14px;font-weight:600;padding:5px 12px;border-radius:999px">22 to pick</span></div>
+</div>
+</div>
+<sc-if value="{{ showOffline }}"><div style="flex:none;margin:10px 16px 0;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:16px;background:var(--chili-soft);color:var(--chili-ink);font-size:14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 20h.01M8.5 16.4a5 5 0 0 1 7 0M2 8.8a15 15 0 0 1 4.2-2.8M22 8.8A15 15 0 0 0 10.7 5M5 12.9a10 10 0 0 1 5.2-2.7M19 12.9a10 10 0 0 0-2.2-1.6M2 2l20 20"></path></svg><span><strong>Offline:</strong> changes will sync</span></div></sc-if>
+<div style="flex:1;min-height:0;overflow:hidden;padding:10px 16px 0;display:flex;flex-direction:column;gap:10px">
+<div style="background:var(--card);border-radius:22px;padding:4px 14px;border:1.5px solid var(--line)">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 2px"><span style="font-size:15px;font-weight:700">To pick</span><span style="font-size:13px;color:var(--mute)">22 items</span></div>
+<sc-for list="{{ cartPick }}" as="c" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:28px 42px minmax(0,1fr) auto;align-items:center;column-gap:10px;min-height:60px;cursor:pointer"><span style="width:26px;height:26px;border-radius:50%;border:2px solid var(--mute)"></span><span style="width:42px;height:42px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:22px">{{ c.e }}</span><span style="min-width:0"><span style="display:block;font-size:16px;font-weight:700">{{ c.n }} <span style="font-weight:400;color:var(--mute)">· {{ c.a }}</span></span><span style="font-size:13px;color:var(--mute)">{{ c.m }}</span></span><span style="font-size:14px;color:var(--mute);display:flex;align-items:center;gap:2px">{{ c.l }}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></span></div>
+</sc-for>
+<button style="height:48px;width:100%;margin:2px 0 10px;border-radius:16px;border:2px dashed var(--line);background:none;font-size:15px;font-weight:600;color:var(--green);display:flex;align-items:center;justify-content:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Add item not on list</button>
+</div>
+<div style="background:var(--card);border-radius:22px;padding:4px 14px;border:1.5px solid var(--line)">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 2px"><span style="font-size:15px;font-weight:700">In cart</span><span style="font-size:13px;color:var(--mute)">18 items</span></div>
+<sc-for list="{{ cartIn }}" as="c" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:28px 42px minmax(0,1fr) auto;align-items:center;column-gap:10px;min-height:56px"><span style="width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--on-green);display:grid;place-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span><span style="width:42px;height:42px;border-radius:13px;background:var(--mint);display:grid;place-items:center;font-size:22px">{{ c.e }}</span><span style="min-width:0"><span style="display:block;font-size:15px;font-weight:600">{{ c.n }}</span><span style="font-size:13px;color:var(--mute)">{{ c.m }}</span></span><span style="font-weight:800;font-size:17px">{{ c.p }}</span></div>
+</sc-for>
+</div>
+</div>
+<div style="flex:none;padding:12px 16px 14px;background:var(--bg);box-shadow:0 -8px 24px rgba(20,33,27,.08)">
+<button style="height:62px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:19px;font-weight:700">At the counter<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s13"><div class="v2-cap"><span class="v2-id">13</span>Price keypad (live)</div>
+<div data-screen-label="13 Price keypad" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="position:absolute;left:0;right:0;top:0;height:220px;background:var(--green);color:var(--on-green);border-radius:0 0 28px 28px;padding:60px 20px 0"><div style="font-weight:800;font-stretch:var(--num-stretch);font-size:86px;line-height:.9">₹2,348</div></div>
+<div style="position:absolute;inset:0;background:rgba(10,18,14,.5)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;top:110px;background:var(--card);border-radius:32px 32px 0 0;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:center;padding:12px 0 4px"><span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span></div>
+<div style="padding:6px 20px 0;display:flex;gap:12px;align-items:center">
+<span style="width:52px;height:52px;flex:none;border-radius:16px;background:var(--soft);display:grid;place-items:center;font-size:30px">🫘</span>
+<div><div style="font-size:21px;font-weight:800;line-height:1.1">Toor Dal <span style="font-weight:400;color:var(--mute)">· arhar</span></div><div style="font-size:14px;color:var(--mute)">1 kg × 2 · any brand</div></div>
+</div>
+<div style="margin:16px 20px 0;background:var(--soft);border-radius:24px;padding:14px 18px">
+<div style="font-size:14px;font-weight:600;color:var(--mute)">Price each</div>
+<div style="display:flex;align-items:center;gap:6px"><span style="font-weight:800;font-stretch:var(--num-stretch);font-size:76px;letter-spacing:-0.03em;line-height:1">{{ kpDisplay }}</span><span style="width:3px;height:58px;border-radius:2px;background:var(--green)"></span></div>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:6px;min-height:32px">
+<sc-if value="{{ kpUp }}"><span style="background:var(--chili);color:#fff;font-size:14px;font-weight:700;padding:5px 12px;border-radius:999px">▲ {{ kpUpText }}</span></sc-if>
+<sc-if value="{{ kpDown }}"><span style="background:var(--mint);color:var(--mint-ink);font-size:14px;font-weight:700;padding:5px 12px;border-radius:999px">▼ {{ kpDownText }}</span></sc-if>
+<sc-if value="{{ kpSame }}"><span style="background:var(--card);font-size:14px;font-weight:700;padding:5px 12px;border-radius:999px">Same as last time</span></sc-if>
+<span style="font-size:14px;color:var(--mute)">{{ kpLine }}</span>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px">
+<sc-for list="{{ keys }}" as="k" hint-placeholder-count="12">
+<button onClick="{{ k.press }}" style="height:60px;border-radius:18px;border:0;background:var(--soft);font-weight:700;font-size:28px" style-active="background:var(--line)">{{ k.k }}</button>
+</sc-for>
+</div>
+<div style="padding:12px 16px 4px">
+<button style="height:62px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:19px;font-weight:700">Add to cart<span style="font-weight:800;font-stretch:var(--num-stretch);font-size:21px">{{ kpTotal }}</span></button>
+</div>
+<div style="height:24px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div>
+</div></div>
+<div id="s14"><div class="v2-cap"><span class="v2-id">14</span>Bill check · match</div>
+<div data-screen-label="14 Bill match" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="height:52px;flex:none;display:flex;align-items:center;gap:8px;padding:0 12px"><button style="width:48px;height:48px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button><span style="font-weight:700;font-size:19px">At the counter</span></div>
+<div style="padding:12px 16px 0;display:flex;flex-direction:column;gap:12px">
+<div style="background:var(--card);border-radius:24px;padding:16px 18px;border:2px solid var(--green)">
+<div style="font-size:14px;font-weight:600;color:var(--mute)">Total on your bill</div>
+<div style="font-weight:800;font-stretch:var(--num-stretch);font-size:64px;letter-spacing:-0.02em;line-height:1">₹2,348</div>
+<div style="font-size:14px;color:var(--mute)">Your cart: ₹2,348 · 18 items</div>
+</div>
+<div style="background:var(--mint);color:var(--mint-ink);border-radius:28px;padding:28px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px">
+<span style="font-size:56px;line-height:1">✅</span>
+<div style="font-size:30px;font-weight:800;line-height:1.1">Bill matches ₹2,348</div>
+<p style="margin:0;font-size:16px;opacity:.85">All 18 items accounted for. Added to October spend.</p>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="padding:12px 16px 14px">
+<button style="height:62px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:19px;font-weight:700">Finish trip<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s15"><div class="v2-cap"><span class="v2-id">15</span>Bill check · mismatch</div>
+<div data-screen-label="15 Bill mismatch" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="height:52px;flex:none;display:flex;align-items:center;gap:8px;padding:0 12px"><button style="width:48px;height:48px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button><span style="font-weight:700;font-size:19px">At the counter</span></div>
+<div style="padding:12px 16px 0;display:flex;flex-direction:column;gap:12px">
+<div style="background:var(--card);border-radius:24px;padding:16px 18px;border:2px solid var(--chili)">
+<div style="font-size:14px;font-weight:600;color:var(--mute)">Total on your bill</div>
+<div style="font-weight:800;font-stretch:var(--num-stretch);font-size:64px;letter-spacing:-0.02em;line-height:1">₹2,371</div>
+<div style="font-size:14px;color:var(--mute)">Your cart: ₹2,348 · 18 items</div>
+</div>
+<div style="background:var(--chili-soft);color:var(--chili-ink);border-radius:24px;padding:18px;display:flex;align-items:center;gap:14px">
+<span style="font-size:40px;line-height:1">❌</span>
+<div style="font-size:22px;font-weight:800;line-height:1.15">Bill is ₹23 more than your cart</div>
+</div>
+<div style="background:var(--card);border-radius:22px;padding:4px 14px;border:1.5px solid var(--line)">
+<div style="font-size:15px;font-weight:700;padding:10px 0 2px">Recheck these</div>
+<div style="display:flex;align-items:center;gap:12px;min-height:58px"><span style="width:42px;height:42px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:22px">🫘</span><span style="flex:1"><strong style="display:block;font-size:15px">Toor Dal × 2</strong><span style="font-size:13px;color:var(--mute)">Price changed ₹165 → ₹177</span></span><button style="height:40px;padding:0 14px;border-radius:20px;border:1.5px solid var(--line);background:none;font-weight:600;font-size:14px">Edit</button></div>
+<div style="display:flex;align-items:center;gap:12px;min-height:58px;border-top:1px solid var(--line)"><span style="width:42px;height:42px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:22px">🧅</span><span style="flex:1"><strong style="display:block;font-size:15px">Onion 2 kg</strong><span style="font-size:13px;color:var(--mute)">Weighed item, price can vary</span></span><button style="height:40px;padding:0 14px;border-radius:20px;border:1.5px solid var(--line);background:none;font-weight:600;font-size:14px">Edit</button></div>
+<div style="display:flex;align-items:center;gap:12px;min-height:58px;border-top:1px solid var(--line)"><span style="width:42px;height:42px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:22px">🧾</span><span style="flex:1"><strong style="display:block;font-size:15px">Missed an item?</strong><span style="font-size:13px;color:var(--mute)">Look for ₹23 on the bill</span></span><button style="height:40px;padding:0 14px;border-radius:20px;border:1.5px solid var(--line);background:none;font-weight:600;font-size:14px">Add</button></div>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="padding:12px 16px 14px;display:flex;gap:10px">
+<button style="height:62px;flex:1;border-radius:20px;background:var(--card);border:1.5px solid var(--line);font-size:16px;font-weight:600">Edit total</button>
+<button style="height:62px;flex:1.6;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;font-weight:700">Finish trip<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+</div>
+</section>
+<section class="v2-sec" id="money">
+<div class="v2-sh"><span class="v2-id">D</span>Compare &amp; spend</div>
+<div class="v2-row">
+<div id="s16"><div class="v2-cap"><span class="v2-id">16</span>Compare (live)</div>
+<div data-screen-label="16 Compare" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:8px 20px 10px;display:flex;justify-content:space-between;align-items:center"><h1 style="font-size:34px;font-weight:800;margin:0;line-height:1">Compare</h1><sc-if value="{{ canAdd }}"><button onClick="{{ addOpt }}" style="height:44px;padding:0 16px;border-radius:22px;border:1.5px solid var(--line);background:var(--card);font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Option</button></sc-if></div>
+<div style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 16px 12px;display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ opts }}" as="o" hint-placeholder-count="3">
+<sc-if value="{{ o.best }}"><div style="background:var(--card);border-radius:22px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;border:2.5px solid var(--green);position:relative">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;flex:none;border-radius:50%;background:var(--green);color:var(--on-green);display:grid;place-items:center;font-weight:800;font-size:14px">{{ o.letter }}</span><input value="{{ o.name }}" onChange="{{ o.setName }}" style="flex:1;min-width:0;border:0;background:none;outline:none;font-size:16px;font-weight:700;padding:0"><span style="background:var(--yellow);color:#14211B;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px">⭐ Best value</span></div>
+<div style="display:flex;gap:6px;height:44px"><input value="{{ o.qty }}" onChange="{{ o.setQty }}" inputmode="decimal" style="width:54px;border-radius:14px;border:1.5px solid var(--line);background:var(--soft);padding:0 10px;font-size:17px;font-weight:700;outline:none"><div style="display:flex;border-radius:14px;background:var(--soft);padding:3px"><sc-for list="{{ o.units }}" as="u" hint-placeholder-count="5"><sc-if value="{{ u.sel }}"><button onClick="{{ u.pick }}" style="width:34px;border-radius:11px;border:0;background:var(--green);color:var(--on-green);font-size:14px;font-weight:700;padding:0">{{ u.u }}</button></sc-if><sc-if value="{{ u.off }}"><button onClick="{{ u.pick }}" style="width:34px;border-radius:11px;border:0;background:none;font-size:14px;padding:0">{{ u.u }}</button></sc-if></sc-for></div><div style="flex:1;min-width:0;display:flex;align-items:center;border-radius:14px;border:1.5px solid var(--line);background:var(--soft);padding:0 10px;gap:2px"><span style="font-weight:700">₹</span><input value="{{ o.price }}" onChange="{{ o.setPrice }}" inputmode="decimal" style="width:100%;min-width:0;border:0;background:none;outline:none;font-size:17px;font-weight:700;padding:0"></div></div>
+</div></sc-if>
+<sc-if value="{{ o.notBest }}"><div style="background:var(--card);border-radius:22px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;border:1.5px solid var(--line)">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;flex:none;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:800;font-size:14px">{{ o.letter }}</span><input value="{{ o.name }}" onChange="{{ o.setName }}" style="flex:1;min-width:0;border:0;background:none;outline:none;font-size:16px;font-weight:700;padding:0"></div>
+<div style="display:flex;gap:6px;height:44px"><input value="{{ o.qty }}" onChange="{{ o.setQty }}" inputmode="decimal" style="width:54px;border-radius:14px;border:1.5px solid var(--line);background:var(--soft);padding:0 10px;font-size:17px;font-weight:700;outline:none"><div style="display:flex;border-radius:14px;background:var(--soft);padding:3px"><sc-for list="{{ o.units }}" as="u" hint-placeholder-count="5"><sc-if value="{{ u.sel }}"><button onClick="{{ u.pick }}" style="width:34px;border-radius:11px;border:0;background:var(--ink);color:var(--bg);font-size:14px;font-weight:700;padding:0">{{ u.u }}</button></sc-if><sc-if value="{{ u.off }}"><button onClick="{{ u.pick }}" style="width:34px;border-radius:11px;border:0;background:none;font-size:14px;padding:0">{{ u.u }}</button></sc-if></sc-for></div><div style="flex:1;min-width:0;display:flex;align-items:center;border-radius:14px;border:1.5px solid var(--line);background:var(--soft);padding:0 10px;gap:2px"><span style="font-weight:700">₹</span><input value="{{ o.price }}" onChange="{{ o.setPrice }}" inputmode="decimal" style="width:100%;min-width:0;border:0;background:none;outline:none;font-size:17px;font-weight:700;padding:0"></div></div>
+</div></sc-if>
+</sc-for>
+<div style="background:var(--green);color:var(--on-green);border-radius:22px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:14px;opacity:.85">{{ saveName }}</div>
+<div style="font-size:22px;font-weight:800;line-height:1.1;color:var(--yellow)">{{ saveMain }}</div>
+<sc-for list="{{ results }}" as="r" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:26px;border-radius:13px;background:rgba(255,246,230,.14);position:relative;overflow:hidden">
+<sc-if value="{{ r.best }}"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ r.w }};border-radius:13px;background:var(--yellow)"></div><span style="position:absolute;left:10px;top:0;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:700;color:#14211B;white-space:nowrap">{{ r.name }}</span></sc-if>
+<sc-if value="{{ r.notBest }}"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ r.w }};border-radius:13px;background:rgba(255,246,230,.3)"></div><span style="position:absolute;left:10px;top:0;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:600;white-space:nowrap">{{ r.name }}</span></sc-if>
+</div><span style="width:72px;text-align:right;font-weight:800;font-size:15px">{{ r.label }}</span></div>
+</sc-for>
+</div>
+</div>
+<div style="flex:none;padding:10px 16px 12px">
+<button style="height:58px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:18px;font-weight:700">Add winner to list<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<dc-import name="RupliNav2" active="compare" hint-size="100%,76px"></dc-import>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--card)"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s17"><div class="v2-cap"><span class="v2-id">17</span>Spend</div>
+<div data-screen-label="17 Spend" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:8px 20px 10px;display:flex;justify-content:space-between;align-items:center"><h1 style="font-size:34px;font-weight:800;margin:0;line-height:1">Spend</h1>
+<div style="display:flex;align-items:center;height:44px;border-radius:22px;background:var(--card);border:1.5px solid var(--line)"><button style="width:40px;height:100%;border:0;background:none;display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button><span style="font-weight:700;font-size:15px">Oct 2026</span><button style="width:40px;height:100%;border:0;background:none;display:grid;place-items:center;opacity:.3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button></div></div>
+<div style="flex:1;min-height:0;overflow:hidden;padding:0 16px;display:flex;flex-direction:column;gap:10px">
+<div style="background:var(--green);color:var(--on-green);border-radius:26px;padding:16px 18px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-weight:800;font-stretch:var(--num-stretch);font-size:56px;letter-spacing:-0.02em;line-height:.95">₹8,420</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px"><span style="background:var(--yellow);color:#14211B;font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px">▼ 7.5%</span><span style="font-size:13px;opacity:.85">₹685 less than Sep</span></div></div></div>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;align-items:end;height:92px;margin-top:14px">
+<div style="height:76%;border-radius:8px;background:rgba(255,246,230,.28)"></div>
+<div style="height:84%;border-radius:8px;background:rgba(255,246,230,.28)"></div>
+<div style="height:100%;border-radius:8px;background:rgba(255,246,230,.28)"></div>
+<div style="height:78%;border-radius:8px;background:rgba(255,246,230,.28)"></div>
+<div style="height:92%;border-radius:8px;background:rgba(255,246,230,.28)"></div>
+<div style="height:86%;border-radius:8px;background:var(--yellow)"></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:6px;font-size:12px;text-align:center;opacity:.85"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span style="font-weight:800;opacity:1;color:var(--yellow)">Oct</span></div>
+</div>
+<div style="background:var(--card);border-radius:22px;padding:14px;border:1.5px solid var(--line);display:flex;gap:14px;align-items:center">
+<div style="width:104px;height:104px;flex:none;border-radius:50%;background:conic-gradient(#0F5C3E 0 26%,#FFC531 0 49%,#5FBF8A 0 65%,#E0401F 0 78%,#F29E7E 0 86%,#B9AE98 0);display:grid;place-items:center"><span style="width:62px;height:62px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:12px;font-weight:700;text-align:center;line-height:1.1">6<br>groups</span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:3px">
+<sc-for list="{{ spendCats }}" as="c" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="width:10px;height:10px;flex:none;border-radius:50%;background:{{ c.c }}"></span><span style="flex:1">{{ c.n }}</span><strong>{{ c.v }}</strong></div>
+</sc-for>
+</div>
+</div>
+<div style="background:var(--card);border-radius:22px;padding:4px 14px;border:1.5px solid var(--line)">
+<div style="font-size:15px;font-weight:700;padding:10px 0 2px">Transactions</div>
+<sc-for list="{{ txns }}" as="t" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;min-height:58px;border-top:1px solid var(--line);cursor:pointer"><span style="width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:20px">{{ t.e }}</span><span style="flex:1;min-width:0"><span style="display:block;font-weight:600;font-size:15px">{{ t.n }}</span><span style="display:flex;gap:6px;align-items:center;font-size:12px;color:var(--mute)"><span style="background:var(--soft);color:var(--ink);font-weight:600;padding:1px 8px;border-radius:999px">{{ t.src }}</span>{{ t.d }}</span></span><span style="font-weight:800;font-size:16px">{{ t.p }}</span></div>
+</sc-for>
+</div>
+</div>
+<button style="position:absolute;right:16px;bottom:110px;height:56px;padding:0 20px;border-radius:28px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);font-size:16px;font-weight:700;display:flex;align-items:center;gap:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Add expense</button>
+<dc-import name="RupliNav2" active="spend" hint-size="100%,76px"></dc-import>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--card)"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s18"><div class="v2-cap"><span class="v2-id">18</span>Transaction · re-categorise (live)</div>
+<div data-screen-label="18 Transaction detail" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 12px"><button style="width:48px;height:48px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button><span style="background:var(--card);border:1.5px solid var(--line);font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px">💬 From SMS</span></div>
+<div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 0 6px">
+<span style="width:60px;height:60px;border-radius:20px;background:var(--mint);display:grid;place-items:center;font-size:30px">🛵</span>
+<div style="font-weight:800;font-stretch:var(--num-stretch);font-size:68px;letter-spacing:-0.02em;line-height:1;margin-top:8px">₹486</div>
+<div style="font-size:19px;font-weight:700">Zepto</div>
+<div style="font-size:14px;color:var(--mute)">Yesterday, 7:42 pm</div>
+</div>
+<div style="background:var(--card);border-radius:22px;padding:2px 16px;border:1.5px solid var(--line)">
+<div style="display:flex;justify-content:space-between;height:44px;align-items:center;font-size:15px"><span style="color:var(--mute)">Account</span><strong>HDFC Bank ••1234</strong></div>
+<div style="display:flex;justify-content:space-between;height:44px;align-items:center;font-size:15px;border-top:1px solid var(--line)"><span style="color:var(--mute)">UPI ref</span><strong style="font-family:ui-monospace,Menlo,monospace;font-size:13px">427519830042</strong></div>
+</div>
+<div style="font-size:15px;font-weight:700;margin-top:2px">Category</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+<sc-if value="{{ c.sel }}"><button onClick="{{ c.pick }}" style="height:68px;border-radius:18px;border:2px solid var(--green);background:var(--green);color:var(--on-green);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="font-size:22px">{{ c.e }}</span><span style="font-size:13px;font-weight:700">{{ c.n }}</span></button></sc-if>
+<sc-if value="{{ c.off }}"><button onClick="{{ c.pick }}" style="height:68px;border-radius:18px;border:1.5px solid var(--line);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="font-size:22px">{{ c.e }}</span><span style="font-size:13px;font-weight:500">{{ c.n }}</span></button></sc-if>
+</sc-for>
+</div>
+<button onClick="{{ toggleAlways }}" style="display:flex;align-items:center;gap:14px;min-height:64px;border-radius:20px;border:0;background:var(--soft);padding:0 16px;text-align:left">
+<span style="flex:1;font-size:15px;font-weight:600;line-height:1.3">Always categorise Zepto as {{ catName }}</span>
+<sc-if value="{{ always }}"><span style="width:52px;height:32px;flex:none;border-radius:16px;background:var(--green);padding:4px;display:flex;justify-content:flex-end"><span style="width:24px;height:24px;border-radius:50%;background:var(--on-green)"></span></span></sc-if>
+<sc-if value="{{ notAlways }}"><span style="width:52px;height:32px;flex:none;border-radius:16px;border:2px solid var(--mute);padding:4px;display:flex"><span style="width:20px;height:20px;border-radius:50%;background:var(--mute)"></span></span></sc-if>
+</button>
+</div>
+<div style="flex:1"></div>
+<div style="padding:12px 16px 14px">
+<button style="height:60px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:18px;font-weight:700">Save<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></button>
+</div>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+</div>
+</section>
+<section class="v2-sec" id="empty">
+<div class="v2-sh"><span class="v2-id">E</span>Empty states</div>
+<div class="v2-row">
+<div id="s19"><div class="v2-cap"><span class="v2-id">19</span>Lists · empty</div>
+<div data-screen-label="19 Lists empty" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:12px 20px"><h1 style="font-size:38px;font-weight:800;margin:0;line-height:1">Lists</h1></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px;gap:14px">
+<div style="position:relative;width:180px;height:150px"><span style="position:absolute;left:50px;top:20px;width:96px;height:96px;border-radius:30px;background:var(--mint);display:grid;place-items:center;font-size:52px">🧺</span><span style="position:absolute;left:10px;top:84px;width:52px;height:52px;border-radius:18px;background:var(--yellow);display:grid;place-items:center;font-size:26px;transform:rotate(-10deg)">🥛</span><span style="position:absolute;left:130px;top:0;width:46px;height:46px;border-radius:16px;background:var(--card);display:grid;place-items:center;font-size:24px;transform:rotate(12deg)">🧅</span></div>
+<h2 style="font-size:28px;font-weight:800;margin:0">No lists yet</h2>
+<p style="margin:0;font-size:17px;line-height:1.45;color:var(--mute)">Start with the usuals: milk, atta, dal, oil. Rupli remembers sizes and brands for next month.</p>
+</div>
+<div style="padding:12px 16px 14px"><button style="height:60px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;font-weight:700"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Make your first list</button></div>
+<dc-import name="RupliNav2" active="lists" hint-size="100%,76px"></dc-import>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--card)"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s20"><div class="v2-cap"><span class="v2-id">20</span>Spend · empty</div>
+<div data-screen-label="20 Spend empty" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:12px 20px"><h1 style="font-size:38px;font-weight:800;margin:0;line-height:1">Spend</h1></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px;gap:14px">
+<div style="width:150px;height:150px;border-radius:50%;border:14px solid var(--soft);display:grid;place-items:center;font-weight:800;font-stretch:var(--num-stretch);font-size:44px;color:var(--mute)">₹0</div>
+<h2 style="font-size:28px;font-weight:800;margin:0">No spends in October yet</h2>
+<p style="margin:0;font-size:17px;line-height:1.45;color:var(--mute)">Finish a shopping trip, add an expense, or import your bank SMS.</p>
+</div>
+<div style="padding:12px 16px 14px;display:flex;gap:10px">
+<button style="height:60px;flex:1;border-radius:20px;background:var(--card);border:1.5px solid var(--line);font-size:16px;font-weight:600">Add expense</button>
+<button style="height:60px;flex:1.3;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);font-size:17px;font-weight:700">Import SMS</button>
+</div>
+<dc-import name="RupliNav2" active="spend" hint-size="100%,76px"></dc-import>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--card)"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+<div id="s21"><div class="v2-cap"><span class="v2-id">21</span>Compare · empty</div>
+<div data-screen-label="21 Compare empty" style="width:390px;height:844px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border-radius:28px;box-shadow:0 20px 50px rgba(20,33,27,.18)">
+<div style="height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%)"></span><span style="width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;display:flex"><span style="width:72%;background:currentColor;border-radius:1px"></span></span></span></div>
+<div style="padding:12px 20px"><h1 style="font-size:38px;font-weight:800;margin:0;line-height:1">Compare</h1></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px;gap:14px">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:84px;height:100px;border-radius:24px;background:var(--card);border:1.5px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:36px">🌻<span style="font-size:14px;font-weight:700">1 L</span></span><span style="font-size:20px;font-weight:800;color:var(--mute)">vs</span><span style="width:84px;height:100px;border-radius:24px;background:var(--mint);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:36px">🛢️<span style="font-size:14px;font-weight:700">5 L</span></span></div>
+<h2 style="font-size:28px;font-weight:800;margin:0">Which pack is cheaper?</h2>
+<p style="margin:0;font-size:17px;line-height:1.45;color:var(--mute)">Enter two to four packs with quantity and price. Rupli works out the price per kg, L or piece.</p>
+</div>
+<div style="padding:12px 16px 14px"><button style="height:60px;width:100%;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);font-size:18px;font-weight:700">Start comparing</button></div>
+<dc-import name="RupliNav2" active="compare" hint-size="100%,76px"></dc-import>
+<div style="height:20px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--card)"><span style="width:108px;height:4px;border-radius:2px;background:var(--ink);opacity:.4"></span></div>
+</div></div>
+</div>
+</section>
+<section class="v2-sec" id="system">
+<div class="v2-sh"><span class="v2-id">F</span>Design system</div>
+<div style="width:1240px;max-width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;font-variant-numeric:tabular-nums">
+<div style="background:var(--card);border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:14px">
+<div style="font-size:18px;font-weight:800">Color</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:13px">
+<div><div style="height:60px;border-radius:16px;background:#0F5C3E"></div><strong style="display:block;margin-top:6px">Kirana green</strong><span style="color:var(--mute)">brand, selected</span></div>
+<div><div style="height:60px;border-radius:16px;background:#FFC531"></div><strong style="display:block;margin-top:6px">Turmeric</strong><span style="color:var(--mute)">primary CTA</span></div>
+<div><div style="height:60px;border-radius:16px;background:#E0401F"></div><strong style="display:block;margin-top:6px">Chilli</strong><span style="color:var(--mute)">paid more</span></div>
+<div><div style="height:60px;border-radius:16px;background:#FFF6E6;border:1.5px solid #E8DBC1"></div><strong style="display:block;margin-top:6px">Cream</strong><span style="color:var(--mute)">ground</span></div>
+<div><div style="height:60px;border-radius:16px;background:#D9F1E2"></div><strong style="display:block;margin-top:6px">Mint</strong><span style="color:var(--mute)">in cart, done</span></div>
+<div><div style="height:60px;border-radius:16px;background:#14211B"></div><strong style="display:block;margin-top:6px">Ink</strong><span style="color:var(--mute)">text, CTA edge</span></div>
+</div>
+</div>
+<div style="background:var(--card);border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:800">Type · Anek Latin</div>
+<div style="font-weight:800;font-stretch:var(--num-stretch);font-size:60px;letter-spacing:-0.03em;line-height:.95">₹1,25,000</div>
+<div style="font-size:13px;color:var(--mute)">Numeral 56–124 · 800 · wide · tabular</div>
+<div style="font-size:34px;font-weight:800;line-height:1">Monthly Kirana</div>
+<div style="font-size:13px;color:var(--mute)">Title 28–38 · 800</div>
+<div style="font-size:17px"><strong>Toor Dal</strong> <span style="color:var(--mute)">· arhar</span></div>
+<div style="font-size:13px;color:var(--mute)">Item 15–17 · 700, alias 400 muted</div>
+</div>
+<div style="background:var(--card);border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:18px;font-weight:800">Shape &amp; touch</div>
+<div style="display:flex;gap:10px;align-items:flex-end"><span style="width:44px;height:44px;border-radius:14px;background:var(--soft)"></span><span style="width:60px;height:60px;border-radius:20px;background:var(--soft)"></span><span style="width:84px;height:84px;border-radius:28px;background:var(--soft)"></span></div>
+<div style="font-size:13px;color:var(--mute)">Radius 14 tiles · 18–20 buttons · 22–28 cards · pills 999</div>
+<div style="font-size:13px;color:var(--mute)">48dp minimum target. Screen margin 16. CTAs 58–62 tall in the bottom third.</div>
+</div>
+<div style="background:var(--card);border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:18px;font-weight:800">Buttons</div>
+<button style="height:60px;border-radius:20px;background:var(--yellow);color:#14211B;border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:18px;font-weight:700">Start shopping<span>→</span></button>
+<button style="height:56px;border-radius:18px;background:var(--card);border:1.5px solid var(--line);font-size:16px;font-weight:600">New list</button>
+<button style="height:48px;border-radius:16px;border:2px dashed var(--line);background:none;font-size:15px;font-weight:600;color:var(--green)">+ Add item not on list</button>
+</div>
+<div style="background:var(--card);border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:18px;font-weight:800">Chips &amp; badges</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="height:48px;border-radius:24px;border:1.5px solid var(--line);padding:0 18px;display:flex;align-items:center">Gokul</span><span style="height:48px;border-radius:24px;background:var(--ink);color:var(--bg);padding:0 18px;display:flex;align-items:center;font-weight:700">Amul</span><span style="height:44px;border-radius:22px;background:var(--ink);color:var(--bg);padding:0 16px;display:flex;align-items:center;font-weight:700">Dairy</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:var(--chili);color:#fff;font-size:14px;font-weight:700;padding:5px 12px;border-radius:999px">▲ ₹12 more than last time</span><span style="background:var(--yellow);color:#14211B;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px">⭐ Best value</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:6px"><span style="background:var(--soft);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px">🛒 Cart</span><span style="background:var(--soft);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px">💬 SMS</span><span style="background:var(--soft);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px">✍️ Manual</span><span style="background:var(--mint);color:var(--mint-ink);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px">Amul</span></div>
+</div>
+<div style="background:var(--card);border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:14px">
+<div style="font-size:18px;font-weight:800">Controls</div>
+<div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+<div style="display:flex;align-items:center;height:44px;border-radius:22px;background:var(--soft);padding:0 2px"><span style="width:40px;height:40px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-weight:800">−</span><span style="min-width:28px;text-align:center;font-weight:800">2</span><span style="width:40px;height:40px;border-radius:50%;background:var(--green);color:var(--on-green);display:grid;place-items:center;font-weight:800">+</span></div>
+<span style="width:26px;height:26px;border-radius:50%;border:2px solid var(--mute)"></span>
+<span style="width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--on-green);display:grid;place-items:center;font-size:14px;font-weight:800">✓</span>
+<span style="width:52px;height:32px;border-radius:16px;background:var(--green);padding:4px;display:flex;justify-content:flex-end"><span style="width:24px;height:24px;border-radius:50%;background:var(--on-green)"></span></span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,64px);gap:8px"><span style="height:52px;border-radius:16px;background:var(--soft);display:grid;place-items:center;font-weight:700;font-size:24px">7</span><span style="height:52px;border-radius:16px;background:var(--soft);display:grid;place-items:center;font-weight:700;font-size:24px">8</span><span style="height:52px;border-radius:16px;background:var(--soft);display:grid;place-items:center;font-weight:700;font-size:24px">9</span></div>
+<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:16px;background:var(--chili-soft);color:var(--chili-ink);font-size:14px"><strong>Offline:</strong> changes will sync</div>
+</div>
+<div style="grid-column:1 / -1;background:var(--card);border-radius:28px;padding:24px;display:flex;flex-wrap:wrap;gap:32px;align-items:center">
+<div style="width:390px;border-radius:20px;overflow:hidden;border:1.5px solid var(--line)"><dc-import name="RupliNav2" active="lists" hint-size="390px,76px"></dc-import></div>
+<p style="flex:1 1 300px;margin:0;font-size:15px;line-height:1.5;color:var(--mute)">Bottom nav follows Android: centered icon and label, with a yellow pill behind the active icon. Sheets rise with a 32px top radius over a 50% scrim. Cards are white on cream with a hairline cream border.</p>
+</div>
+</div>
+</section></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;numerals&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;wide&quot;,&quot;regular&quot;,&quot;condensed&quot;],&quot;default&quot;:&quot;wide&quot;,&quot;tsType&quot;:&quot;'wide'|'regular'|'condensed'&quot;},&quot;showOffline&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {
+    pack: 1, brand: 0, qty: 30, kp: '177', sms: 0, cat: 0, always: true,
+    opts: [
+      { name: 'Fortune Oil 1 L', qty: '1', unit: 'L', price: '165' },
+      { name: 'Fortune Oil 5 L tin', qty: '5', unit: 'L', price: '780' },
+      { name: 'Saffola Gold 1 L', qty: '1', unit: 'L', price: '199' }
+    ],
+    list: [
+      { cat: 'Dairy', e: '🥛', n: 'Milk', a: 'doodh', p: '1 L', b: 'Amul', pr: 68, q: 30, c: false },
+      { cat: 'Atta & Rice', e: '🌾', n: 'Aashirvaad Atta', a: 'gehun atta', p: '10 kg', b: 'Aashirvaad', pr: 485, q: 1, c: true },
+      { cat: 'Dal', e: '🫘', n: 'Toor Dal', a: 'arhar · tur', p: '1 kg', b: 'Any', pr: 165, q: 2, c: false },
+      { cat: 'Oil & Ghee', e: '🌻', n: 'Sunflower Oil', a: 'tel', p: '5 L', b: 'Fortune', pr: 780, q: 1, c: true },
+      { cat: 'Masala', e: '🧂', n: 'Salt', a: 'namak · meeth', p: '1 kg', b: 'Tata', pr: 28, q: 1, c: true },
+      { cat: 'Sabzi', e: '🧅', n: 'Onion', a: 'pyaaz · kanda', p: '2 kg', b: 'Loose', pr: 60, q: 1, c: false },
+      { cat: 'Cleaning', e: '🧺', n: 'Detergent', a: 'kapde ka powder', p: '1 kg', b: 'Surf Excel', pr: 140, q: 1, c: true },
+      { cat: 'Bakery & Eggs', e: '🥚', n: 'Eggs', a: 'anda', p: 'Tray of 30', b: 'Any', pr: 210, q: 1, c: false }
+    ]
+  };
+  componentDidMount() {
+    this.apply();
+    this.timer = setInterval(() => this.setState(s => ({ sms: s.sms >= 440 ? 0 : s.sms + 5 })), 45);
+  }
+  componentDidUpdate() { this.apply(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  apply() {
+    const d = document.documentElement;
+    d.dataset.theme = this.props.theme ?? 'light';
+    d.dataset.num = this.props.numerals ?? 'wide';
+  }
+  modItem(i, f) { this.setState(s => ({ list: s.list.map((x, j) => j === i ? { ...x, ...f(x) } : x) })); }
+  modOpt(i, patch) { this.setState(s => ({ opts: s.opts.map((x, j) => j === i ? { ...x, ...patch } : x) })); }
+  renderVals() {
+    const s = this.state;
+    const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
+    const fmt = n => Math.abs(n - Math.round(n)) < 0.05 ? Math.round(n).toLocaleString('en-IN') : n.toFixed(1);
+    const groups = [];
+    let sum = 0, checked = 0;
+    s.list.forEach((it, i) => {
+      sum += it.pr * it.q; if (it.c) checked++;
+      let g = groups.find(x => x.name === it.cat);
+      if (!g) { g = { name: it.cat, items: [], count: '' }; groups.push(g); }
+      g.items.push({
+        e: it.e, n: it.n, a: it.a, p: it.p, b: it.b, qty: it.q, checked: it.c, unchecked: !it.c,
+        last: 'Last ' + inr(it.pr),
+        inc: () => this.modItem(i, x => ({ q: x.q + 1 })),
+        dec: () => this.modItem(i, x => ({ q: Math.max(1, x.q - 1) })),
+        toggle: () => this.modItem(i, x => ({ c: !x.c }))
+      });
+    });
+    groups.forEach(g => { g.count = g.items.filter(x => x.checked).length + '/' + g.items.length; });
+    const pickedN = 8 + checked;
+    const packP = [34, 68, 396];
+    const packs = ['500 ml', '1 L', '6 L'].map((l, i) => ({ l, price: inr(packP[i]), sel: s.pack === i, off: s.pack !== i, pick: () => this.setState({ pack: i }) }));
+    const brands = ['Amul', 'Mother Dairy', 'Gokul', 'Any'].map((l, i) => ({ l, sel: s.brand === i, off: s.brand !== i, pick: () => this.setState({ brand: i }) }));
+    const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', '⌫'].map(k => ({
+      k, press: () => this.setState(st => {
+        let v = st.kp;
+        if (k === 'C') v = ''; else if (k === '⌫') v = v.slice(0, -1);
+        else if (v.length < 5) v = (v === '0' ? '' : v) + k;
+        return { kp: v };
+      })
+    }));
+    const kpv = parseInt(s.kp || '0', 10);
+    const diff = kpv - 165;
+    const norm = o => {
+      const q = parseFloat(o.qty), p = parseFloat(o.price);
+      if (!(q > 0) || !(p > 0)) return null;
+      const f = (o.unit === 'g' || o.unit === 'ml') ? 1000 : 1;
+      const u = o.unit === 'g' ? 'kg' : o.unit === 'ml' ? 'L' : o.unit === 'pcs' ? 'pc' : o.unit;
+      return { per: p / (q / f), u };
+    };
+    const pers = s.opts.map(norm);
+    const valid = pers.map((x, i) => x && { ...x, i }).filter(Boolean).sort((a, b) => a.per - b.per);
+    const best = valid.length > 1 ? valid[0] : null, second = valid[1];
+    const max = Math.max(1, ...valid.map(v => v.per));
+    const isBest = i => !!best && best.i === i;
+    const opts = s.opts.map((o, i) => ({
+      ...o, letter: 'ABCD'[i], best: isBest(i), notBest: !isBest(i),
+      setName: e => this.modOpt(i, { name: e.target.value }),
+      setQty: e => this.modOpt(i, { qty: e.target.value.replace(/[^0-9.]/g, '') }),
+      setPrice: e => this.modOpt(i, { price: e.target.value.replace(/[^0-9.]/g, '') }),
+      units: ['g', 'kg', 'ml', 'L', 'pcs'].map(u => ({ u, sel: o.unit === u, off: o.unit !== u, pick: () => this.modOpt(i, { unit: u }) }))
+    }));
+    const results = s.opts.map((o, i) => {
+      const n = pers[i];
+      return { name: o.name, label: n ? '₹' + fmt(n.per) + '/' + n.u : '—', w: n ? Math.max(18, n.per / max * 100).toFixed(1) + '%' : '18%', best: isBest(i), notBest: !isBest(i) };
+    });
+    const saveMain = best ? `saves ₹${fmt(second.per - best.per)}/${best.u} · ${((second.per - best.per) / second.per * 100).toFixed(1)}%` : 'Fill in two options';
+    const saveName = best ? s.opts[best.i].name : 'Compare';
+    const count = Math.min(s.sms, 342);
+    const months = ['Oct', 'Sep', 'Aug', 'Jul', 'Jun', 'May'];
+    const smsMonth = count >= 342 ? 'Done · May to Oct 2026' : `Reading ${months[Math.min(5, Math.floor(count / 342 * 6))]} 2026`;
+    const k = count / 342;
+    const smsCats = [['🛒', 'Groceries & kirana', 128], ['🛵', 'Food delivery', 64], ['🧾', 'Bills & recharge', 41], ['⛽', 'Fuel', 22], ['❔', 'Not sorted yet', 87]].map(([e, n, v]) => ({ e, n, v: Math.round(v * k) }));
+    const catList = [['🛒', 'Groceries'], ['🍔', 'Food delivery'], ['🧴', 'Household'], ['💊', 'Health'], ['🪔', 'Pooja'], ['⛽', 'Fuel']];
+    const cats = catList.map(([e, n], i) => ({ e, n, sel: s.cat === i, off: s.cat !== i, pick: () => this.setState({ cat: i }) }));
+    return {
+      showOffline: this.props.showOffline ?? true,
+      groups, estTotal: inr(6850 - 4073 + sum), picked: pickedN + '/40', pickedW: (pickedN / 40 * 100).toFixed(1) + '%',
+      packs, brands, qty: s.qty,
+      incQty: () => this.setState(st => ({ qty: st.qty + 1 })),
+      decQty: () => this.setState(st => ({ qty: Math.max(1, st.qty - 1) })),
+      sheetEach: inr(packP[s.pack]) + ' each', sheetTotal: inr(packP[s.pack] * s.qty),
+      keys, kpDisplay: s.kp === '' ? '₹0' : inr(kpv),
+      kpUp: diff > 0, kpDown: diff < 0 && kpv > 0, kpSame: diff === 0,
+      kpUpText: `₹${diff.toLocaleString('en-IN')} more than last time`,
+      kpDownText: `₹${(-diff).toLocaleString('en-IN')} less than last time`,
+      kpLine: `2 × ${inr(kpv)} = ${inr(kpv * 2)}`, kpTotal: inr(kpv * 2),
+      opts, results, saveMain, saveName, canAdd: s.opts.length < 4,
+      addOpt: () => this.setState(st => ({ opts: [...st.opts, { name: 'Option ' + 'ABCD'[st.opts.length], qty: '', unit: 'L', price: '' }] })),
+      smsCount: count, smsW: (k * 100).toFixed(0) + '%', smsMonth, smsCats,
+      cats, catName: catList[s.cat][1], always: s.always, notAlways: !s.always,
+      toggleAlways: () => this.setState(st => ({ always: !st.always })),
+      tabs: ['Dairy', 'Atta & Rice', 'Dal', 'Oil & Ghee', 'Masala', 'Sabzi', 'Fruits', 'Bakery & Eggs', 'Snacks', 'Beverages', 'Dry Fruits', 'Cleaning', 'Personal Care', 'Pooja', 'Baby', 'Kitchen'].map((t, i) => ({ t, on: i === 0, off: i !== 0 })),
+      usual: [['🥛', 'Milk', '30'], ['🌾', 'Atta', ''], ['🫘', 'Toor dal', '2'], ['🥚', 'Eggs', ''], ['🧅', 'Onion', '1'], ['🍅', 'Tomato', '']].map(([e, n, b]) => ({ e, n, b, sel: !!b, off: !b })),
+      tiles: [['🥛', 'Milk', 'doodh', '30'], ['🥣', 'Curd', 'dahi', '2'], ['🧀', 'Paneer', 'cottage cheese', ''], ['🧈', 'Butter', 'makhan', '1'], ['🫙', 'Ghee', 'tup', '1'], ['🫗', 'Buttermilk', 'chaas · taak', ''], ['🥤', 'Lassi', 'lassi', ''], ['🍦', 'Cream', 'malai', ''], ['🍮', 'Khoa', 'mawa', '']].map(([e, n, a, b]) => ({ e, n, a, b, sel: !!b, off: !b })),
+      cartPick: [['🫘', 'Toor Dal', 'arhar', '2 × 1 kg', '₹165'], ['🧅', 'Onion', 'kanda', '2 kg', '₹60'], ['🥚', 'Eggs', 'anda', 'Tray of 30', '₹210'], ['🍅', 'Tomato', 'tamatar', '1 kg', '₹40']].map(([e, n, a, m, l]) => ({ e, n, a, m, l })),
+      cartIn: [['🌾', 'Aashirvaad Atta', '10 kg', '₹485'], ['🌻', 'Fortune Sunflower Oil', '5 L', '₹780'], ['🧺', 'Surf Excel', '1 kg', '₹140'], ['🧂', 'Tata Salt', '1 kg', '₹28']].map(([e, n, m, p]) => ({ e, n, m, p })),
+      trips: [['🛒', 'DMart, Kothrud', '28 Sep · 34 items', '₹3,212'], ['🛵', 'Zepto', '22 Sep · 6 items', '₹486'], ['🏪', 'Sharma Kirana', '14 Sep · 11 items', '₹1,140']].map(([e, n, m, p]) => ({ e, n, m, p })),
+      txns: [['🛒', 'DMart, Kothrud', '🛒 Cart', 'Today', '₹2,348'], ['🛵', 'Zepto', '💬 SMS', 'Yesterday', '₹486'], ['🏪', 'Sharma Kirana', '✍️ Manual', '1 Oct', '₹1,140'], ['🥛', 'Amul milk, monthly', '💬 SMS', '1 Oct', '₹2,040']].map(([e, n, src, d, p]) => ({ e, n, src, d, p })),
+      spendCats: [['#0F5C3E', 'Dairy', '₹2,180', '26%'], ['#FFC531', 'Atta & Rice', '₹1,940', '23%'], ['#5FBF8A', 'Sabzi & Fruits', '₹1,350', '16%'], ['#E0401F', 'Oil & Ghee', '₹1,120', '13%'], ['#F29E7E', 'Cleaning', '₹690', '8%'], ['#B9AE98', 'Other', '₹1,140', '14%']].map(([c, n, v, p]) => ({ c, n, v, p }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+{ "name": "rupli", "private": true, "workspaces": ["shared", "api"],
+  "scripts": { "test": "npm test --workspaces --if-present" } }

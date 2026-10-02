@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq, ne, sql } from 'drizzle-orm';
 import { ManualTxn, SmsBatch, UpdateTxn, defaultCategorySlug, findCartMatch, matchRule, smsFallbackRef } from '@rupli/shared';
 import { accounts, categoryRules, transactions } from '../db/schema';
 import type { AppEnv } from '../lib/env';
@@ -28,7 +28,7 @@ export const transactionRoutes = new Hono<AppEnv>()
       await db.insert(categoryRules).values({ userId, pattern, categoryId: b.categoryId })
         .onConflictDoUpdate({ target: [categoryRules.userId, categoryRules.pattern], set: { categoryId: b.categoryId } });
       await db.update(transactions).set({ categoryId: b.categoryId })
-        .where(and(eq(transactions.userId, userId), sql`lower(${transactions.merchant}) = ${pattern}`));
+        .where(and(eq(transactions.userId, userId), ne(transactions.source, 'cart'), sql`lower(${transactions.merchant}) = ${pattern}`));
     }
     return c.json(row);
   })

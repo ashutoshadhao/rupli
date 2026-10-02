@@ -9,18 +9,19 @@ const paise = z.number().int().positive().max(10_000_000_000);
 const qty = z.number().int().min(1).max(999);
 const pack = z.string().min(1).max(20);
 const brand = z.string().max(40).nullable();
+const nonEmpty = (o: object) => Object.keys(o).length > 0;
 
 export const CreateList = z.object({ name, month: Month.optional() });
 export const UpdateList = z.object({
   name: name.optional(), month: Month.nullable().optional(),
   status: z.enum(['draft', 'shopping', 'done']).optional(), archived: z.boolean().optional(),
-});
+}).refine(nonEmpty, 'nothing to update');
 export const CopyList = z.object({ name, month: Month.optional() });
 export const AddListItem = z.object({ productId: id, packSize: pack, brand, qty });
 export const UpdateListItem = z.object({
   packSize: pack.optional(), brand: brand.optional(), qty: qty.optional(),
   checked: z.boolean().optional(), position: z.number().int().min(0).optional(),
-});
+}).refine(nonEmpty, 'nothing to update');
 export const CreateProduct = z.object({
   name, aliases: z.array(z.string().max(40)).max(10).default([]),
   category: z.string().refine(c => PRODUCT_CATEGORIES.some(pc => pc.slug === c), 'unknown category'),
@@ -30,7 +31,7 @@ export const CreateProduct = z.object({
 });
 export const StartTrip = z.object({ listId: id.optional(), store: z.string().trim().max(80).optional() });
 export const AddTripItem = z.object({ productId: id, packSize: pack, brand, qty, pricePaise: paise, listItemId: id.optional() });
-export const UpdateTripItem = z.object({ qty: qty.optional(), pricePaise: paise.optional() });
+export const UpdateTripItem = z.object({ qty: qty.optional(), pricePaise: paise.optional() }).refine(nonEmpty, 'nothing to update');
 export const FinishTrip = z.object({ billTotalPaise: paise });
 export const ManualTxn = z.object({
   amountPaise: paise, direction: z.enum(['debit', 'credit']), categoryId: id,

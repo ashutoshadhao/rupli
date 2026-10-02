@@ -71,3 +71,21 @@ it('SMS after a cart trip with the same amount is linked, not double counted', a
   const [sms] = await db.select().from(transactions).where(and(eq(transactions.userId, 'user_a'), eq(transactions.source, 'sms')));
   expect(sms!.linkedTransactionId).toBe(fin.body.transactionId);
 });
+
+it('self-transfer: debit and credit with the same UPI ref are both kept', async () => {
+  const r = await json('user_a', 'POST', '/v1/transactions/sms-batch', { items: [
+    { ...zepto, merchant: 'self', ref: '427500000001' },
+    { ...zepto, direction: 'credit', merchant: 'self', ref: '427500000001', last4: '5678', bank: 'SBI' },
+  ] });
+  expect(r.body).toMatchObject({ inserted: 2, duplicates: 0 });
+});
+
+it('makeRule does not move cart trips out of Groceries', async () => {
+  const { body: trip } = await json('user_a', 'POST', '/v1/trips', { store: 'DMART' });
+  const fin = await json('user_a', 'POST', `/v1/trips/${trip.id}/finish`, { billTotalPaise: 5000 });
+  await json('user_a', 'POST', '/v1/transactions/sms-batch', { items: [{ ...zepto, merchant: 'DMART', ref: '55', amountPaise: 99999, occurredAt: '2026-01-01T10:00:00+05:30' }] });
+  const sms = (await userTxns('user_a')).find(t => t.source === 'sms')!;
+  await req('user_a', 'PATCH', `/v1/transactions/${sms.id}`, { categoryId: await catId('household'), makeRule: true });
+  const cart = (await userTxns('user_a')).find(t => t.id === fin.body.transactionId)!;
+  expect(cart.categoryId).toBe(await catId('groceries'));
+});

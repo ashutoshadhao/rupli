@@ -71,3 +71,13 @@ it('400 on invalid input with error shape', async () => {
   const bad = await req('user_a', 'POST', '/v1/lists');
   expect(bad.status).toBe(400);
 });
+
+it('empty PATCH body → 400, not 500', async () => {
+  const { body: l } = await json('user_a', 'POST', '/v1/lists', { name: 'A' });
+  const { body: i } = await json('user_a', 'POST', `/v1/lists/${l.id}/items`, { productId: await productId('milk'), packSize: '1 L', brand: null, qty: 1 });
+  expect((await req('user_a', 'PATCH', `/v1/lists/${l.id}`, {})).status).toBe(400);
+  expect((await req('user_a', 'PATCH', `/v1/lists/${l.id}/items/${i.id}`, {})).status).toBe(400);
+  const { body: trip } = await json('user_a', 'POST', '/v1/trips', {});
+  const { body: ti } = await json('user_a', 'POST', `/v1/trips/${trip.id}/items`, { productId: await productId('milk'), packSize: '1 L', brand: null, qty: 1, pricePaise: 6800 });
+  expect((await req('user_a', 'PATCH', `/v1/trips/${trip.id}/items/${ti.id}`, {})).status).toBe(400);
+});

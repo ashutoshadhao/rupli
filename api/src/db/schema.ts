@@ -74,6 +74,7 @@ export const transactions = pgTable('transactions', {
   linkedTransactionId: uuid('linked_transaction_id').references((): AnyPgColumn => transactions.id, { onDelete: 'set null' }),
   note: text('note'), createdAt: ts('created_at').notNull().defaultNow(),
 }, t => [
-  uniqueIndex('txn_source_ref_uniq').on(t.userId, t.source, t.sourceRef),
+  // direction is part of the key: a self-transfer has a debit and a credit with one UPI ref
+  uniqueIndex('txn_source_ref_uniq').on(t.userId, t.source, t.sourceRef, t.direction),
   index('txn_user_time_idx').on(t.userId, t.occurredAt),
 ]);

@@ -24,6 +24,12 @@ const cases: [string, string, object | null][] = [
   ['AX-PHONPE', 'Get Rs.500 cashback on your first UPI payment! Download now', null],
   ['AX-HDFCBK', 'Your UPI transaction of Rs.300.00 to swiggy@icici has failed. Amount if debited will be refunded', null],
   ['AX-HDFCBK', 'Transaction of Rs.5,000.00 on your HDFC Bank card x9012 was declined due to insufficient balance', null],
+  ['VM-SBIUPI', 'Avl Bal Rs 10,000.00. A/c XX1234 debited by 250.00 on 01Oct26 trf to DMART Refno 427512340002',
+    { amountPaise: 25000, direction: 'debit', merchant: 'DMART', ref: '427512340002', last4: '1234', bank: 'SBI' }],
+  ['AD-CANBNK', 'An amount of INR 486.00 has been DEBITED to your account XXX5566 on 01-10-26 towards UPI Ref 427519830099. Never share OTP/PIN with anyone - Canara Bank',
+    { amountPaise: 48600, direction: 'debit', merchant: null, ref: '427519830099', last4: '5566', bank: 'Canara Bank' }],
+  ['AX-HDFCBK', 'Your a/c XX1234 will be debited with Rs 499.00 on 05-10-26 towards NETFLIX mandate. To cancel, visit netbanking', null],
+  ['AX-ICICIB', 'EMI of Rs 3,500.00 for loan XX7788 is due on 05-10-26 and will be debited from Acct XX901', null],
   ['AX-AIRTEL', 'Recharge with Rs.299 and get credited 2GB extra data!', null],
 ];
 it.each(cases)('%s: %s', (sender, body, expected) => expect(parseSms(sender, body)).toEqual(expected));

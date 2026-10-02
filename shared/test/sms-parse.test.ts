@@ -1,0 +1,29 @@
+import { it, expect } from 'vitest';
+import { parseSms } from '../src/sms/parse';
+
+const cases: [string, string, object | null][] = [
+  ['AX-HDFCBK', 'Sent Rs.486.00\nFrom HDFC Bank A/C *1234\nTo ZEPTO MARKETPLACE PRIVATE LIMITED\nOn 01/10/26\nRef 427519830042\nNot You?\nCall 18002586161/SMS BLOCK UPI to 7308080808',
+    { amountPaise: 48600, direction: 'debit', merchant: 'ZEPTO MARKETPLACE', ref: '427519830042', last4: '1234', bank: 'HDFC Bank' }],
+  ['VM-SBIUPI', 'Dear UPI user A/C X5678 debited by 250.0 on date 30Sep26 trf to SWIGGY Refno 427398765432. If not u? call 1800111109. -SBI',
+    { amountPaise: 25000, direction: 'debit', merchant: 'SWIGGY', ref: '427398765432', last4: '5678', bank: 'SBI' }],
+  ['JD-ICICIB', 'ICICI Bank Acct XX901 debited for Rs 1,250.00 on 28-Sep-26; DMART AVENUE credited. UPI:427312345678. Call 18002662 for dispute. SMS BLOCK 901 to 9215676766.',
+    { amountPaise: 125000, direction: 'debit', merchant: 'DMART AVENUE', ref: '427312345678', last4: '901', bank: 'ICICI Bank' }],
+  ['AD-AXISBK-S', 'INR 780.00 debited\nA/c no. XX4321\n29-09-26, 18:22:11\nUPI/P2M/427398761234/BIGBASKET\nNot you? SMS BLOCKUPI Cust ID to 919951860002\nAxis Bank',
+    { amountPaise: 78000, direction: 'debit', merchant: 'BIGBASKET', ref: '427398761234', last4: '4321', bank: 'Axis Bank' }],
+  ['BZ-KOTAKB', 'Sent Rs.120.00 from Kotak Bank AC X7788 to rapido@ybl on 27-09-26.UPI Ref 427298765123. Not you, https://kotak.com/KBANKT/Fraud',
+    { amountPaise: 12000, direction: 'debit', merchant: 'rapido@ybl', ref: '427298765123', last4: '7788', bank: 'Kotak Bank' }],
+  ['AX-HDFCBK', 'Rs.2,348.00 spent on HDFC Bank Card x9012 at DMART on 2026-09-30:19:05:22.Not You? To Block+Reissue Call 18002586161/SMS BLOCK CC 9012 to 7308080808',
+    { amountPaise: 234800, direction: 'debit', merchant: 'DMART', ref: null, last4: '9012', bank: 'HDFC Bank' }],
+  ['JM-PAYTMB', 'Paid Rs.199 to Blinkit from Paytm Payments Bank a/c 123456. UPI Ref: 427411112222. Download Paytm',
+    { amountPaise: 19900, direction: 'debit', merchant: 'Blinkit', ref: '427411112222', last4: null, bank: 'Paytm Payments Bank' }],
+  ['AX-HDFCBK', 'Rs.1,25,000.00 credited to HDFC Bank A/c XX1234 on 01-10-26 by a/c linked to VPA aarti@okicici (UPI Ref No 427512340000).',
+    { amountPaise: 12500000, direction: 'credit', merchant: 'aarti@okicici', ref: '427512340000', last4: '1234', bank: 'HDFC Bank' }],
+  ['VM-SBIUPI', 'Dear SBI UPI User, ur A/cX5678 credited by Rs500 on 29Sep26 by (Ref no 427288881111)',
+    { amountPaise: 50000, direction: 'credit', merchant: null, ref: '427288881111', last4: '5678', bank: 'SBI' }],
+  ['AX-HDFCBK', '123456 is your OTP for txn of Rs.486.00 at ZEPTO on HDFC Bank card x9012. Valid for 10 mins. Do not share', null],
+  ['AX-PHONPE', 'Get Rs.500 cashback on your first UPI payment! Download now', null],
+  ['AX-HDFCBK', 'Your UPI transaction of Rs.300.00 to swiggy@icici has failed. Amount if debited will be refunded', null],
+  ['AX-HDFCBK', 'Transaction of Rs.5,000.00 on your HDFC Bank card x9012 was declined due to insufficient balance', null],
+  ['AX-AIRTEL', 'Recharge with Rs.299 and get credited 2GB extra data!', null],
+];
+it.each(cases)('%s: %s', (sender, body, expected) => expect(parseSms(sender, body)).toEqual(expected));

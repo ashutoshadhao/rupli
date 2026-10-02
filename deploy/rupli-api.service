@@ -1,0 +1,19 @@
+[Unit]
+Description=Rupli API
+After=network.target postgresql@18-main.service
+
+[Service]
+User=rupli-api
+WorkingDirectory=/opt/rupli/api
+EnvironmentFile=/etc/rupli/api.env
+# ponytail: tsx at runtime; switch to a compiled build if cold start matters
+ExecStart=/opt/rupli/node_modules/.bin/tsx src/server.ts
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

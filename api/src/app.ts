@@ -7,6 +7,8 @@ import { productRoutes } from './routes/products';
 import { categoryRoutes } from './routes/categories';
 import { listRoutes } from './routes/lists';
 import { tripRoutes } from './routes/trips';
+import { transactionRoutes } from './routes/transactions';
+import { spendRoutes } from './routes/spend';
 
 export function createApp({ db, verify }: { db: Db; verify: Verify }) {
   const app = new Hono<AppEnv>();
@@ -19,5 +21,7 @@ export function createApp({ db, verify }: { db: Db; verify: Verify }) {
   app.route('/v1/categories', categoryRoutes);
   app.route('/v1/lists', listRoutes);
   app.route('/v1/trips', tripRoutes);
+  app.route('/v1/transactions', transactionRoutes);
+  app.route('/v1/spend', spendRoutes);
   return app;
 }

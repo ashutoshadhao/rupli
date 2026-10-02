@@ -70,4 +70,11 @@ it('cross-user → 404 (trip, list on start)', async () => {
   expect((await req('user_b', 'POST', '/v1/trips', { listId: list.id })).status).toBe(404);
 });
 
-it.todo('SMS that arrived before finish gets linked (enabled in Task 9)');
+it('SMS that arrived before finish gets linked', async () => {
+  const occurredAt = new Date(Date.now() - 5 * 60_000).toISOString();
+  await json('user_a', 'POST', '/v1/transactions/sms-batch', { items: [{ amountPaise: 1000, direction: 'debit', merchant: 'DMART', ref: '77', last4: '1234', bank: 'HDFC Bank', occurredAt }] });
+  const { body: trip } = await json('user_a', 'POST', '/v1/trips', {});
+  const fin = await json('user_a', 'POST', `/v1/trips/${trip.id}/finish`, { billTotalPaise: 1000 });
+  const [sms] = await db.select().from(transactions).where(eq(transactions.source, 'sms'));
+  expect(sms!.linkedTransactionId).toBe(fin.body.transactionId);
+});

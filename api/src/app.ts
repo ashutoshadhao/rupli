@@ -6,6 +6,7 @@ import { onError } from './lib/http';
 import { productRoutes } from './routes/products';
 import { categoryRoutes } from './routes/categories';
 import { listRoutes } from './routes/lists';
+import { tripRoutes } from './routes/trips';
 
 export function createApp({ db, verify }: { db: Db; verify: Verify }) {
   const app = new Hono<AppEnv>();
@@ -17,5 +18,6 @@ export function createApp({ db, verify }: { db: Db; verify: Verify }) {
   app.route('/v1/products', productRoutes);
   app.route('/v1/categories', categoryRoutes);
   app.route('/v1/lists', listRoutes);
+  app.route('/v1/trips', tripRoutes);
   return app;
 }

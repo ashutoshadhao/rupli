@@ -56,3 +56,13 @@ it("'other' covers grocery spend without item breakdown", async () => {
   expect(s.byProductCategory).toEqual([{ category: 'other', totalPaise: 48600 }]);
   expect(s.transactions[0]).toMatchObject({ merchant: 'ZEPTO', source: 'sms', account: { bank: 'HDFC Bank', last4: '1234' } });
 });
+
+it('spend also reports all debits of the month (every category), excluding linked duplicates', async () => {
+  const cats = (await json('user_a', 'GET', '/v1/categories')).body as { id: string; slug: string }[];
+  const id = (s: string) => cats.find(c => c.slug === s)!.id;
+  await json('user_a', 'POST', '/v1/transactions', { amountPaise: 5000, direction: 'debit', categoryId: id('household'), occurredAt: '2026-10-04T10:00:00+05:30' });
+  await json('user_a', 'POST', '/v1/transactions', { amountPaise: 2000, direction: 'debit', categoryId: id('groceries'), occurredAt: '2026-10-04T10:00:00+05:30' });
+  await json('user_a', 'POST', '/v1/transactions', { amountPaise: 9999, direction: 'credit', categoryId: id('income'), occurredAt: '2026-10-04T10:00:00+05:30' });
+  const { body: s } = await json('user_a', 'GET', '/v1/spend?month=2026-10');
+  expect(s).toMatchObject({ totalPaise: 2000, allPaise: 7000 });
+});

@@ -17,7 +17,7 @@ export const UpdateList = z.object({
   status: z.enum(['draft', 'shopping', 'done']).optional(), archived: z.boolean().optional(),
 }).refine(nonEmpty, 'nothing to update');
 export const CopyList = z.object({ name, month: Month.optional() });
-export const AddListItem = z.object({ productId: id, packSize: pack, brand, qty });
+export const AddListItem = z.object({ id: id.optional(), productId: id, packSize: pack, brand, qty });
 export const UpdateListItem = z.object({
   packSize: pack.optional(), brand: brand.optional(), qty: qty.optional(),
   checked: z.boolean().optional(), position: z.number().int().min(0).optional(),
@@ -30,8 +30,9 @@ export const CreateProduct = z.object({
   brands: z.array(z.string().max(40)).max(10).default([]),
 });
 export const StartTrip = z.object({ listId: id.optional(), store: z.string().trim().max(80).optional() });
-export const AddTripItem = z.object({ productId: id, packSize: pack, brand, qty, pricePaise: paise, listItemId: id.optional() });
+export const AddTripItem = z.object({ id: id.optional(), productId: id, packSize: pack, brand, qty, pricePaise: paise, listItemId: id.optional() });
 export const UpdateTripItem = z.object({ qty: qty.optional(), pricePaise: paise.optional() }).refine(nonEmpty, 'nothing to update');
+export const PauseTrip = z.object({ paused: z.boolean() });
 export const FinishTrip = z.object({ billTotalPaise: paise });
 export const ManualTxn = z.object({
   amountPaise: paise, direction: z.enum(['debit', 'credit']), categoryId: id,
@@ -44,3 +45,9 @@ export const SmsItem = z.object({
   occurredAt: z.string().datetime({ offset: true }),
 });
 export const SmsBatch = z.object({ items: z.array(SmsItem).max(500) });
+
+export const SetBudget = z.object({ budgetPaise: paise.nullable() });
+export const CreateRecurring = z.object({
+  name, amountPaise: paise, categoryId: id, dayOfMonth: z.number().int().min(1).max(31), startMonth: Month.optional(),
+});
+export const JoinList = z.object({ code: z.string().trim().min(4).max(12) });

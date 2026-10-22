@@ -6,8 +6,9 @@ KEY=~/Downloads/ssh-key-2026-09-04.key
 VM=ubuntu@137.23.49.189
 SSH="ssh -i $KEY -o IdentitiesOnly=yes"
 
-rsync -az --delete --exclude node_modules --exclude '.env*' --exclude .git --exclude .superpowers --exclude docs --exclude app \
-  -e "$SSH" ./ $VM:/tmp/rupli/
+# anchored filters: ship the server code only, but keep app/package.json so the workspace lockfile resolves
+rsync -az --delete --exclude node_modules --exclude '.env*' --exclude /.git --exclude /.superpowers --exclude /.claude --exclude /docs \
+  --include /app/ --include /app/package.json --exclude '/app/*' -e "$SSH" ./ $VM:/tmp/rupli/
 $SSH $VM 'set -e
   sudo rsync -a --delete --exclude node_modules /tmp/rupli/ /opt/rupli/
   sudo chown -R rupli-api:rupli-api /opt/rupli

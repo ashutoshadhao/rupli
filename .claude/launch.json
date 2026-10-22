@@ -1,6 +1,44 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "design", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4173", "-d", "docs/design/handoff"], "port": 4173 }
+    {
+      "name": "design",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4173",
+        "-d",
+        "docs/design/handoff"
+      ],
+      "port": 4173
+    },
+    {
+      "name": "app-web",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd app && npx expo start --web --port 8081"
+      ],
+      "port": 8081
+    },
+    {
+      "name": "e2e-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd api && set -a && . ./.env.e2e && set +a && npx tsx src/dev-server.ts"
+      ],
+      "port": 8788
+    },
+    {
+      "name": "app-e2e",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd app && EXPO_PUBLIC_DEV_AUTH=1 EXPO_PUBLIC_API_URL=http://localhost:8788 npx expo start --web --port 8082"
+      ],
+      "port": 8082
+    }
   ]
 }

@@ -1,9 +1,9 @@
 import { Hono, type Context } from 'hono';
-import { and, asc, desc, eq, inArray, isNull, max } from 'drizzle-orm';
-import { AddListItem, CopyList, CreateList, UpdateList, UpdateListItem, estimateTotal } from '@rupli/shared';
-import { listItems, lists, products } from '../db/schema';
+import { and, asc, count, desc, eq, inArray, isNotNull, isNull, max, or, sql, sum } from 'drizzle-orm';
+import { AddListItem, CopyList, CreateList, JoinList, UpdateList, UpdateListItem, estimateTotal } from '@rupli/shared';
+import { listItems, listMembers, lists, products, trips } from '../db/schema';
 import type { AppEnv } from '../lib/env';
-import { body, idParam, notFound } from '../lib/http';
+import { ApiError, body, idParam, notFound } from '../lib/http';
 import { lastPrices, priceKey } from '../lib/prices';
 import { assertProductVisible } from '../lib/products';
 
@@ -16,11 +16,26 @@ const serialize = (l: ListRow) => ({
   copiedFrom: l.copiedFrom, archivedAt: l.archivedAt, createdAt: l.createdAt,
 });
 
+// lists the user owns or joined with an invite code
+const accessible = (userId: string) =>
+  or(eq(lists.userId, userId), sql`${lists.id} in (select list_id from list_members where user_id = ${userId})`);
+
+// any list the user can see and edit (owner or family member); strangers get 404
 export async function ownedList(c: C, id = idParam(c)) {
-  const [l] = await c.get('db').select().from(lists).where(and(eq(lists.id, id), eq(lists.userId, c.get('userId'))));
+  const [l] = await c.get('db').select().from(lists).where(and(eq(lists.id, id), accessible(c.get('userId'))));
   if (!l) throw notFound('list');
   return l;
 }
+
+// delete / archive / share stay with the owner; to a member the list "doesn't exist" for those actions
+async function ownerList(c: C) {
+  const l = await ownedList(c);
+  if (l.userId !== c.get('userId')) throw notFound('list');
+  return l;
+}
+
+const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O or 1/I to avoid misreading
+const newCode = () => Array.from({ length: 6 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join('');
 
 async function ownedItem(c: C, listId: string) {
   const [i] = await c.get('db').select().from(listItems).where(and(eq(listItems.id, idParam(c, 'itemId')), eq(listItems.listId, listId)));
@@ -31,13 +46,20 @@ async function ownedItem(c: C, listId: string) {
 export const listRoutes = new Hono<AppEnv>()
   .get('/', async c => {
     const db = c.get('db'), userId = c.get('userId');
-    const rows = await db.select().from(lists).where(and(eq(lists.userId, userId), isNull(lists.archivedAt))).orderBy(desc(lists.createdAt));
+    const rows = await db.select().from(lists).where(and(accessible(userId), isNull(lists.archivedAt))).orderBy(desc(lists.createdAt));
     const items = rows.length ? await db.select().from(listItems).where(inArray(listItems.listId, rows.map(l => l.id))) : [];
     const prices = await lastPrices(db, userId);
+    const paid = rows.length ? await db.select({ listId: trips.listId, total: sum(trips.billTotalPaise).mapWith(Number) }).from(trips)
+      .where(and(isNotNull(trips.finishedAt), inArray(trips.listId, rows.map(l => l.id)))).groupBy(trips.listId) : [];
+    const members = rows.length ? await db.select({ listId: listMembers.listId, n: count() }).from(listMembers)
+      .where(inArray(listMembers.listId, rows.map(l => l.id))).groupBy(listMembers.listId) : [];
     return c.json(rows.map(l => {
       const its = items.filter(i => i.listId === l.id);
+      const memberCount = members.find(m => m.listId === l.id)?.n ?? 0;
       return {
         ...serialize(l), itemCount: its.length, checkedCount: its.filter(i => i.checked).length,
+        owner: l.userId === userId, shared: memberCount > 0 || l.userId !== userId, memberCount,
+        paidPaise: paid.find(p => p.listId === l.id)?.total ?? null,
         estimatePaise: estimateTotal(its.map(i => ({ qty: i.qty, lastPricePaise: prices.get(priceKey(i.productId, i.packSize))?.pricePaise ?? null }))),
       };
     }));
@@ -56,8 +78,10 @@ export const listRoutes = new Hono<AppEnv>()
       .innerJoin(products, eq(products.id, listItems.productId))
       .where(eq(listItems.listId, l.id)).orderBy(asc(listItems.position), asc(listItems.id));
     const prices = await lastPrices(db, c.get('userId'));
+    const [{ n } = { n: 0 }] = await db.select({ n: count() }).from(listMembers).where(eq(listMembers.listId, l.id));
+    const isOwner = l.userId === c.get('userId');
     return c.json({
-      ...serialize(l),
+      ...serialize(l), owner: isOwner, shared: n > 0 || !isOwner, memberCount: n, inviteCode: isOwner ? l.inviteCode : null,
       items: rows.map(({ item, product }) => {
         const last = prices.get(priceKey(item.productId, item.packSize));
         return {
@@ -69,8 +93,8 @@ export const listRoutes = new Hono<AppEnv>()
   })
 
   .patch('/:id', async c => {
-    const l = await ownedList(c);
     const b = await body(c, UpdateList);
+    const l = b.archived !== undefined ? await ownerList(c) : await ownedList(c);
     const [u] = await c.get('db').update(lists).set({
       ...(b.name !== undefined && { name: b.name }),
       ...(b.month !== undefined && { month: monthToDate(b.month) }),
@@ -95,14 +119,55 @@ export const listRoutes = new Hono<AppEnv>()
     return c.json(serialize(created), 201);
   })
 
+  // finished trips keep their history (trips.list_id is set null); a list being shopped can't go
+  .delete('/:id', async c => {
+    const db = c.get('db');
+    const l = await ownerList(c);
+    const [open] = await db.select({ id: trips.id }).from(trips).where(and(eq(trips.listId, l.id), isNull(trips.finishedAt)));
+    if (open) throw new ApiError(409, 'list_in_use', 'Finish or delete the open trip for this list first');
+    await db.delete(lists).where(eq(lists.id, l.id));
+    return c.body(null, 204);
+  })
+
+  // owner gets a stable 6-character code to send to family
+  .post('/:id/share', async c => {
+    const db = c.get('db');
+    const l = await ownerList(c);
+    if (l.inviteCode) return c.json({ code: l.inviteCode });
+    for (let i = 0; i < 5; i++) {
+      const [u] = await db.update(lists).set({ inviteCode: newCode() }).where(eq(lists.id, l.id)).returning().catch(() => []);
+      if (u) return c.json({ code: u.inviteCode });
+    }
+    throw new ApiError(409, 'code_failed', 'Could not create a share code, try again');
+  })
+
+  .post('/join', async c => {
+    const db = c.get('db'), userId = c.get('userId');
+    const { code } = await body(c, JoinList);
+    const [l] = await db.select().from(lists).where(and(eq(lists.inviteCode, code.toUpperCase()), isNull(lists.archivedAt)));
+    if (!l) throw notFound('list');
+    if (l.userId !== userId) await db.insert(listMembers).values({ listId: l.id, userId }).onConflictDoNothing();
+    return c.json(serialize(l));
+  })
+
+  .post('/:id/leave', async c => {
+    const l = await ownedList(c);
+    await c.get('db').delete(listMembers).where(and(eq(listMembers.listId, l.id), eq(listMembers.userId, c.get('userId'))));
+    return c.body(null, 204);
+  })
+
   .post('/:id/items', async c => {
     const db = c.get('db');
     const l = await ownedList(c);
     const b = await body(c, AddListItem);
     await assertProductVisible(db, c.get('userId'), b.productId);
     const [{ pos } = { pos: null }] = await db.select({ pos: max(listItems.position) }).from(listItems).where(eq(listItems.listId, l.id));
-    const [row] = await db.insert(listItems).values({ ...b, listId: l.id, position: (pos ?? -1) + 1 }).returning();
-    return c.json(row, 201);
+    // app-chosen id makes offline adds replayable; a retry returns the same row
+    const [row] = await db.insert(listItems).values({ ...b, listId: l.id, position: (pos ?? -1) + 1 }).onConflictDoNothing().returning();
+    if (row) return c.json(row, 201);
+    const [existing] = await db.select().from(listItems).where(and(eq(listItems.id, b.id!), eq(listItems.listId, l.id)));
+    if (!existing) throw new ApiError(409, 'id_taken', 'That item id is already in use');
+    return c.json(existing, 201);
   })
 
   .patch('/:id/items/:itemId', async c => {

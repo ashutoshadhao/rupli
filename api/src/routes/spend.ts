@@ -4,10 +4,14 @@ import { Month } from '@rupli/shared';
 import { accounts, categories, transactions } from '../db/schema';
 import type { AppEnv } from '../lib/env';
 import { istMonthStart, monthsEnding, nextMonth } from '../lib/months';
+import { materializeRecurring } from '../lib/recurring';
+import { users } from '../db/schema';
 
 export const spendRoutes = new Hono<AppEnv>().get('/', async c => {
   const db = c.get('db'), userId = c.get('userId');
   const month = Month.parse(c.req.query('month'));
+  await materializeRecurring(db, userId);
+  const [me] = await db.select({ budgetPaise: users.budgetPaise }).from(users).where(eq(users.id, userId));
   const months = monthsEnding(month, 6);
   const from = istMonthStart(months[0]!), monthFrom = istMonthStart(month), to = istMonthStart(nextMonth(month));
   const [groceries] = await db.select({ id: categories.id }).from(categories).where(eq(categories.slug, 'groceries'));
@@ -21,6 +25,12 @@ export const spendRoutes = new Hono<AppEnv>().get('/', async c => {
   const byMonth = new Map(totals.map(r => [r.m, Number(r.total)]));
   const series = months.map(m => ({ month: m, totalPaise: byMonth.get(m) ?? 0 }));
   const totalPaise = series.at(-1)!.totalPaise;
+
+  const [all] = await db.execute<{ total: string | null }>(sql`
+    select sum(amount_paise) total from transactions
+    where user_id = ${userId} and direction = 'debit' and linked_transaction_id is null
+      and occurred_at >= ${monthFrom.toISOString()}::timestamptz and occurred_at < ${to.toISOString()}::timestamptz`);
+  const allPaise = Number(all?.total ?? 0);
 
   const cats = await db.execute<{ category: string; total: string }>(sql`
     select p.category, sum(ti.qty * ti.price_paise) total
@@ -39,7 +49,7 @@ export const spendRoutes = new Hono<AppEnv>().get('/', async c => {
     .orderBy(desc(transactions.occurredAt)).limit(200);
 
   return c.json({
-    month, totalPaise, prevTotalPaise: series.at(-2)!.totalPaise, months: series, byProductCategory,
+    month, totalPaise, allPaise, budgetPaise: me?.budgetPaise ?? null, prevTotalPaise: series.at(-2)!.totalPaise, months: series, byProductCategory,
     transactions: rows.map(({ t, cat, acc }) => ({
       id: t.id, amountPaise: t.amountPaise, direction: t.direction, occurredAt: t.occurredAt, merchant: t.merchant,
       source: t.source, sourceRef: t.sourceRef, note: t.note,

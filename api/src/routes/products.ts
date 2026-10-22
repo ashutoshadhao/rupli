@@ -3,7 +3,7 @@ import { asc, sql } from 'drizzle-orm';
 import { CreateProduct, packsBaseUnit } from '@rupli/shared';
 import { products } from '../db/schema';
 import type { AppEnv } from '../lib/env';
-import { body } from '../lib/http';
+import { body, idParam } from '../lib/http';
 import { visibleProduct } from '../lib/products';
 
 export const productRoutes = new Hono<AppEnv>()
@@ -19,6 +19,15 @@ export const productRoutes = new Hono<AppEnv>()
         select ti.product_id, t.started_at from trip_items ti join trips t on t.id = ti.trip_id where t.user_id = ${c.get('userId')}
       ) x group by product_id order by count(*) desc, max(at) desc limit 12`);
     return c.json(rows.map(r => r.product_id));
+  })
+  // every price this user paid for the product, newest first (for the price-history screen)
+  .get('/:id/prices', async c => {
+    const rows = await c.get('db').execute<{ pack_size: string; price_paise: string; brand: string | null; store: string | null; at: string }>(sql`
+      select ti.pack_size, ti.price_paise, ti.brand, t.store, t.finished_at as at
+      from trip_items ti join trips t on t.id = ti.trip_id
+      where t.user_id = ${c.get('userId')} and t.finished_at is not null and ti.product_id = ${idParam(c)}
+      order by t.finished_at desc limit 200`);
+    return c.json(rows.map(r => ({ packSize: r.pack_size, pricePaise: Number(r.price_paise), brand: r.brand, store: r.store, at: new Date(r.at) })));
   })
   .post('/', async c => {
     const b = await body(c, CreateProduct);

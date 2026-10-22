@@ -1,10 +1,11 @@
 import { Hono, type Context } from 'hono';
-import { and, asc, desc, eq, isNotNull, sql } from 'drizzle-orm';
-import { AddTripItem, FinishTrip, StartTrip, UpdateTripItem } from '@rupli/shared';
-import { categories, lists, products, transactions, tripItems, trips } from '../db/schema';
+import { and, asc, desc, eq, ilike, inArray, isNotNull, isNull, lt, gte, sql } from 'drizzle-orm';
+import { AddTripItem, FinishTrip, Month, PauseTrip, StartTrip, UpdateTripItem } from '@rupli/shared';
+import { categories, listItems, lists, products, transactions, tripItems, trips } from '../db/schema';
 import type { AppEnv } from '../lib/env';
 import { ApiError, body, idParam, notFound } from '../lib/http';
 import { assertProductVisible } from '../lib/products';
+import { istMonthStart, nextMonth } from '../lib/months';
 import { ownedList } from './lists';
 
 type C = Context<AppEnv>;
@@ -23,6 +24,17 @@ async function ownedTripItem(c: C, tripId: string) {
   return i;
 }
 
+async function withItems(c: C, t: typeof trips.$inferSelect) {
+  const rows = await c.get('db').select({ item: tripItems, product: products }).from(tripItems)
+    .innerJoin(products, eq(products.id, tripItems.productId)).where(eq(tripItems.tripId, t.id)).orderBy(asc(tripItems.id));
+  return {
+    ...t,
+    items: rows.map(({ item, product }) => ({
+      ...item, product: { id: product.id, name: product.name, aliases: product.aliases, emoji: product.emoji, category: product.category },
+    })),
+  };
+}
+
 export const tripRoutes = new Hono<AppEnv>()
   .post('/', async c => {
     const db = c.get('db');
@@ -35,26 +47,54 @@ export const tripRoutes = new Hono<AppEnv>()
     return c.json(t, 201);
   })
 
+  // finished trips, newest first; ?month=YYYY-MM (IST) &store=text &limit &offset
   .get('/', async c => {
-    const limit = Math.min(Math.max(Number(c.req.query('limit') ?? 5) || 5, 1), 50);
+    const q = c.req.query();
+    const limit = Math.min(Math.max(Number(q.limit ?? 20) || 20, 1), 100);
+    const offset = Math.max(Number(q.offset ?? 0) || 0, 0);
+    const month = q.month ? Month.parse(q.month) : null;
     const rows = await c.get('db').select({
-      trip: trips,
+      trip: trips, listName: lists.name,
       itemCount: sql<number>`(select count(*)::int from trip_items ti where ti.trip_id = "trips"."id")`,
-    }).from(trips).where(and(eq(trips.userId, c.get('userId')), isNotNull(trips.finishedAt)))
-      .orderBy(desc(trips.finishedAt)).limit(limit);
-    return c.json(rows.map(r => ({ ...r.trip, itemCount: r.itemCount, totalPaise: r.trip.billTotalPaise })));
+    }).from(trips).leftJoin(lists, eq(lists.id, trips.listId))
+      .where(and(
+        eq(trips.userId, c.get('userId')), isNotNull(trips.finishedAt),
+        month ? gte(trips.finishedAt, istMonthStart(month)) : undefined,
+        month ? lt(trips.finishedAt, istMonthStart(nextMonth(month))) : undefined,
+        q.store ? ilike(trips.store, `%${q.store.replace(/[%_\\]/g, m => `\\${m}`)}%`) : undefined,
+      ))
+      .orderBy(desc(trips.finishedAt)).limit(limit).offset(offset);
+    return c.json(rows.map(r => ({ ...r.trip, listName: r.listName, itemCount: r.itemCount, totalPaise: r.trip.billTotalPaise })));
   })
 
-  .get('/:id', async c => {
+  // must stay above '/:id'
+  .get('/open', async c => {
+    const [t] = await c.get('db').select().from(trips)
+      .where(and(eq(trips.userId, c.get('userId')), isNull(trips.finishedAt))).orderBy(desc(trips.startedAt)).limit(1);
+    return c.json(t ? await withItems(c, t) : null);
+  })
+
+  .get('/:id', async c => c.json(await withItems(c, await ownedTrip(c))))
+
+  // removes the trip and its spend; cancelling an open trip frees its list again
+  .delete('/:id', async c => {
+    const db = c.get('db');
     const t = await ownedTrip(c);
-    const rows = await c.get('db').select({ item: tripItems, product: products }).from(tripItems)
-      .innerJoin(products, eq(products.id, tripItems.productId)).where(eq(tripItems.tripId, t.id)).orderBy(asc(tripItems.id));
-    return c.json({
-      ...t,
-      items: rows.map(({ item, product }) => ({
-        ...item, product: { id: product.id, name: product.name, aliases: product.aliases, emoji: product.emoji, category: product.category },
-      })),
+    await db.transaction(async tx => {
+      await tx.delete(transactions).where(and(eq(transactions.tripId, t.id), eq(transactions.source, 'cart')));
+      if (!t.finishedAt && t.listId) {
+        const picked = await tx.select({ id: tripItems.listItemId }).from(tripItems).where(eq(tripItems.tripId, t.id));
+        const ids = picked.map(p => p.id).filter((x): x is string => !!x);
+        if (ids.length) await tx.update(listItems).set({ checked: false }).where(inArray(listItems.id, ids));
+      }
+      await tx.delete(trips).where(eq(trips.id, t.id));
+      // a list is only "done" while it still has a finished trip
+      if (t.listId) {
+        const [other] = await tx.select({ id: trips.id }).from(trips).where(and(eq(trips.listId, t.listId), isNotNull(trips.finishedAt)));
+        if (!other) await tx.update(lists).set({ status: 'draft' }).where(eq(lists.id, t.listId));
+      }
     });
+    return c.body(null, 204);
   })
 
   .post('/:id/items', async c => {
@@ -62,8 +102,12 @@ export const tripRoutes = new Hono<AppEnv>()
     const t = await ownedTrip(c, { open: true });
     const b = await body(c, AddTripItem);
     await assertProductVisible(db, c.get('userId'), b.productId);
-    const [row] = await db.insert(tripItems).values({ ...b, tripId: t.id }).returning();
-    return c.json(row, 201);
+    // the app picks the id so offline edits can reference the row; a retried add returns the same row
+    const [row] = await db.insert(tripItems).values({ ...b, tripId: t.id }).onConflictDoNothing().returning();
+    if (row) return c.json(row, 201);
+    const [existing] = await db.select().from(tripItems).where(and(eq(tripItems.id, b.id!), eq(tripItems.tripId, t.id)));
+    if (!existing) throw new ApiError(409, 'id_taken', 'That item id is already in use');
+    return c.json(existing, 201);
   })
 
   .patch('/:id/items/:itemId', async c => {
@@ -83,7 +127,9 @@ export const tripRoutes = new Hono<AppEnv>()
 
   .post('/:id/pause', async c => {
     const t = await ownedTrip(c, { open: true });
-    const [row] = await c.get('db').update(trips).set({ pausedAt: t.pausedAt ? null : new Date() }).where(eq(trips.id, t.id)).returning();
+    // explicit state, not a toggle: a replayed request can't flip it back
+    const { paused } = await body(c, PauseTrip);
+    const [row] = await c.get('db').update(trips).set({ pausedAt: paused ? (t.pausedAt ?? new Date()) : null }).where(eq(trips.id, t.id)).returning();
     return c.json(row);
   })
 

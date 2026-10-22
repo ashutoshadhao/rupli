@@ -23,7 +23,7 @@ export const json = async (user: string | null, method: string, path: string, bo
 export const productId = async (slug: string) => (await db.select().from(products).where(eq(products.slug, slug)))[0]!.id;
 
 export async function resetDb() {
-  await db.execute(sql.raw(`delete from transactions; delete from category_rules; delete from accounts; delete from trip_items;
+  await db.execute(sql.raw(`delete from transactions; delete from recurring_expenses; delete from list_members; delete from category_rules; delete from accounts; delete from trip_items;
     delete from trips; delete from list_items; delete from lists; delete from products where user_id is not null;
     delete from categories where user_id is not null; delete from users;`));
 }

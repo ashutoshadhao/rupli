@@ -81,3 +81,16 @@ it('empty PATCH body → 400, not 500', async () => {
   const { body: ti } = await json('user_a', 'POST', `/v1/trips/${trip.id}/items`, { productId: await productId('milk'), packSize: '1 L', brand: null, qty: 1, pricePaise: 6800 });
   expect((await req('user_a', 'PATCH', `/v1/trips/${trip.id}/items/${ti.id}`, {})).status).toBe(400);
 });
+
+it('client-chosen list item id: retried add is idempotent', async () => {
+  const { body: l } = await json('user_a', 'POST', '/v1/lists', { name: 'A' });
+  const id = crypto.randomUUID();
+  const body = { id, productId: await productId('milk'), packSize: '1 L', brand: null, qty: 2 };
+  expect((await req('user_a', 'POST', `/v1/lists/${l.id}/items`, body)).status).toBe(201);
+  expect((await req('user_a', 'POST', `/v1/lists/${l.id}/items`, body)).status).toBe(201);
+  const { body: got } = await json('user_a', 'GET', `/v1/lists/${l.id}`);
+  expect(got.items).toHaveLength(1);
+  expect(got.items[0].id).toBe(id);
+  const { body: other } = await json('user_b', 'POST', '/v1/lists', { name: 'B' });
+  expect((await req('user_b', 'POST', `/v1/lists/${other.id}/items`, body)).status).toBe(409);
+});

@@ -9,6 +9,9 @@ import { listRoutes } from './routes/lists';
 import { tripRoutes } from './routes/trips';
 import { transactionRoutes } from './routes/transactions';
 import { spendRoutes } from './routes/spend';
+import { lastPrices } from './lib/prices';
+import { meRoutes } from './routes/me';
+import { recurringRoutes } from './routes/recurring';
 
 export function createApp({ db, verify }: { db: Db; verify: Verify }) {
   const app = new Hono<AppEnv>();
@@ -23,5 +26,14 @@ export function createApp({ db, verify }: { db: Db; verify: Verify }) {
   app.route('/v1/trips', tripRoutes);
   app.route('/v1/transactions', transactionRoutes);
   app.route('/v1/spend', spendRoutes);
+  app.route('/v1/me', meRoutes);
+  app.route('/v1/recurring', recurringRoutes);
+  app.get('/v1/prices/last', async c => {
+    const prices = await lastPrices(c.get('db'), c.get('userId'));
+    return c.json([...prices].map(([key, v]) => {
+      const [productId, packSize] = key.split('|') as [string, string];
+      return { productId, packSize, ...v };
+    }));
+  });
   return app;
 }

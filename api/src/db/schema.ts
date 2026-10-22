@@ -13,7 +13,10 @@ const money = (n: string) => bigint(n, { mode: 'number' });
 const owner = () => text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' });
 const emptyArr = sql`'{}'::text[]`;
 
-export const users = pgTable('users', { id: text('id').primaryKey(), createdAt: ts('created_at').notNull().defaultNow() });
+export const users = pgTable('users', {
+  id: text('id').primaryKey(), createdAt: ts('created_at').notNull().defaultNow(),
+  budgetPaise: money('budget_paise'), // monthly grocery budget; null = not set
+});
 
 // user_id null = global catalog row (seeded by slug)
 export const products = pgTable('products', {
@@ -28,7 +31,24 @@ export const lists = pgTable('lists', {
   status: listStatus('status').notNull().default('draft'),
   copiedFrom: uuid('copied_from').references((): AnyPgColumn => lists.id, { onDelete: 'set null' }),
   archivedAt: ts('archived_at'), createdAt: ts('created_at').notNull().defaultNow(),
+  inviteCode: text('invite_code').unique(), // set once the owner shares the list
 }, t => [index('lists_user_idx').on(t.userId)]);
+
+// family sharing: people who joined a list with its invite code
+export const listMembers = pgTable('list_members', {
+  listId: uuid('list_id').notNull().references(() => lists.id, { onDelete: 'cascade' }),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  joinedAt: ts('joined_at').notNull().defaultNow(),
+}, t => [uniqueIndex('list_members_pk').on(t.listId, t.userId), index('list_members_user_idx').on(t.userId)]);
+
+// monthly bills (milkman, maid, rent) that become a transaction each month on dayOfMonth
+export const recurringExpenses = pgTable('recurring_expenses', {
+  id: id(), userId: owner(), name: text('name').notNull(), amountPaise: money('amount_paise').notNull(),
+  categoryId: uuid('category_id').notNull().references(() => categories.id),
+  dayOfMonth: integer('day_of_month').notNull(), startMonth: text('start_month').notNull(), // 'YYYY-MM'
+  doneThrough: text('done_through'), // last month already added; a deleted month isn't re-added
+  createdAt: ts('created_at').notNull().defaultNow(),
+});
 
 export const listItems = pgTable('list_items', {
   id: id(), listId: uuid('list_id').notNull().references(() => lists.id, { onDelete: 'cascade' }),

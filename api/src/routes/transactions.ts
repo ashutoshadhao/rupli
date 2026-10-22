@@ -3,7 +3,7 @@ import { and, eq, ne, sql } from 'drizzle-orm';
 import { ManualTxn, SmsBatch, UpdateTxn, defaultCategorySlug, findCartMatch, matchRule, smsFallbackRef } from '@rupli/shared';
 import { accounts, categoryRules, transactions } from '../db/schema';
 import type { AppEnv } from '../lib/env';
-import { body, idParam, notFound } from '../lib/http';
+import { ApiError, body, idParam, notFound } from '../lib/http';
 import { assertCategoryVisible, categoryMaps } from '../lib/categories';
 
 export const transactionRoutes = new Hono<AppEnv>()
@@ -31,6 +31,16 @@ export const transactionRoutes = new Hono<AppEnv>()
         .where(and(eq(transactions.userId, userId), ne(transactions.source, 'cart'), sql`lower(${transactions.merchant}) = ${pattern}`));
     }
     return c.json(row);
+  })
+
+  // manual (and SMS) entries can be removed; a cart spend belongs to its trip, so delete the trip instead
+  .delete('/:id', async c => {
+    const db = c.get('db');
+    const [t] = await db.select().from(transactions).where(and(eq(transactions.id, idParam(c)), eq(transactions.userId, c.get('userId'))));
+    if (!t) throw notFound('transaction');
+    if (t.source === 'cart') throw new ApiError(409, 'delete_trip_instead', 'This spend comes from a shopping trip. Delete the trip instead.');
+    await db.delete(transactions).where(eq(transactions.id, t.id));
+    return c.body(null, 204);
   })
 
   // ponytail: one round-trip per item; batch the inserts if 5k+ imports feel slow

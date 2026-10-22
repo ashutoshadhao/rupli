@@ -1,2 +1,18 @@
-{ "name": "rupli", "private": true, "workspaces": ["shared", "api"],
-  "scripts": { "test": "npm test --workspaces --if-present" } }
+{
+  "name": "rupli",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "api",
+    "app"
+  ],
+  "scripts": {
+    "test": "npm test --workspaces --if-present"
+  },
+  "overrides": {
+    "typescript": "~6.0.3"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3"
+  }
+}
